@@ -1,0 +1,72 @@
+# 工作流的名称
+name: Auto Build
+
+# 触发工作流的事件
+on:
+  # 1. 当有代码推送到 main 分支时触发
+  push:
+    branches: [ "main" ]
+
+  # 2. 允许您在 GitHub Actions 页面手动触发此工作流
+  workflow_dispatch:
+
+# 赋予工作流写入权限，以便创建 Release 和 Tag
+permissions:
+  contents: write
+
+# 定义工作任务
+jobs:
+  # 任务ID
+  build-and-release:
+    # 指定运行此任务的虚拟机环境
+    runs-on: ubuntu-latest
+
+    # 任务执行的步骤
+    steps:
+      # 步骤 1: 检出您的代码
+      - name: 检出代码
+        # 需要设定 fetch-depth: 0 才能获取所有历史记录以生成日志
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      # 步骤 2: 设置 Java 环境
+      - name: 设置 JDK 21
+        uses: actions/setup-java@v4
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+
+      # 步骤 3: 赋予 gradlew 执行权限
+      - name: 赋予 gradlew 执行权限
+        run: chmod +x ./gradlew
+
+      # 步骤 4: 使用 Gradle 构建项目
+      - name: 使用 Gradle 构建
+        run: ./gradlew build
+
+      # 步骤 5: 获取项目版本号
+      - name: 获取项目版本
+        id: get_version
+        run: echo "VERSION=$(./gradlew -q properties | grep "^version:" | cut -d' ' -f2)" >> $GITHUB_OUTPUT
+
+      # 步骤 6: 上传构建产物 (Artifact)
+      - name: 上传构建产物
+        uses: actions/upload-artifact@v4
+        with:
+          name: NeoLogin-${{ steps.get_version.outputs.VERSION }}
+          path: build/libs/*.jar
+
+      # 步骤 7: 创建并发布 Release
+      - name: 自动创建 Release
+        # 仅在推送到 main 分支时执行
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: softprops/action-gh-release@v2
+        with:
+          name: ${{ steps.get_version.outputs.VERSION }}
+          # 使用版本号作为 Tag 名称
+          tag_name: 1.21.5
+          # 自动生成 Release Notes，内容会包含本次发布的所有提交记录
+          generate_release_notes: true
+          # 将构建出的 jar 文件作为附件上传
+          files: build/libs/*.jar
