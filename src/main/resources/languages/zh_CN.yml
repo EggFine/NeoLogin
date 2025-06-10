@@ -1,0 +1,3 @@
+version: 1.0.0
+Language: "简体中文 (Simplified Chinese)"
+loadedLanguage: "已加载语言文件: %s"
