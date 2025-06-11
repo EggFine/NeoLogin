@@ -1,17 +1,114 @@
 # NeoLogin 配置文件
 # NeoLogin Configuration File
 
-# 配置文件版本号，请勿修改
-# Configuration file version, do not modify
+# --------------[ 插件配置 | Plugin Settings ]--------------
+
+# 配置文件版本号，请勿修改！
+# Configuration file version. DO NOT MODIFY!
 version: 1.0.0
 
 # 插件消息前缀
-# Plugin message prefix
+# The prefix displayed before all plugin messages.
 prefix: "§8[§fNeo§bLogin§8] §f"
 
 # 插件语言设置
-# Plugin language setting
+# Plugin language setting.
 # 可用语言：
 # Available languages:
-#  zh_CN, zh_TW, zh_HK, en_US, en_GB, ru_RU, ar_SA, ja_JP, es_AR, pt_BR, de_DE, fr_FR
+# zh_CN, en_US
 language: zh_CN
+
+# --------------[ 数据库配置 | Database Settings ]--------------
+# 数据库配置
+# Database connection settings.
+database:
+  # 数据库类型
+  # 可用类型：sqlite, mysql, mariadb, postgresql
+  # Database type to use.
+  # Available types: sqlite, mysql, mariadb, postgresql
+  type: "sqlite"
+
+  # Sqlite 设置 (如果 type 是 "sqlite")
+  # Sqlite settings (used only if type is "sqlite").
+  filePath: "plugins/NeoLogin/playerData.db"
+
+  # 远程数据库设置 (用于 mysql, mariadb, postgresql)
+  # Remote database settings (for mysql, mariadb, postgresql).
+  host: "localhost"
+  port: 3306
+  databaseName: "neoLogin"
+  username: "root"
+  password: "123456"
+
+# --------------[ 自动传送配置 | Auto Teleport Settings ]--------------
+# 玩家加入游戏时自动传送到预设位置
+# Automatically teleport players to a preset location.
+autoTeleport:
+  
+  # 总开关
+  # Master switch to enable or disable this feature.
+  enabled: false
+  
+  # 什么时候应该自动传送
+  # Configure when to trigger the teleport.
+  on:
+    # 在玩家加入游戏的时候
+    # On player join.
+    join: false
+    # 在玩家死亡的时候
+    # On player death.
+    death: false
+
+  # 预设位置坐标 (使用 /neologin savelocation 命令设置)
+  # The location to teleport players to (set via /neologin savelocation).
+  locationPos:
+    world: ""   # 世界名称 | World name
+    x: 0.0      # X 坐标 | X coordinate
+    y: 0.0      # Y 坐标 | Y coordinate
+    z: 0.0      # Z 坐标 | Z coordinate
+    yaw: 0.0    # 水平角度 | Yaw
+    pitch: 0.0  # 垂直角度 | Pitch
+
+  # 玩家登录后是否自动返回之前的位置
+  # Whether to teleport the player back to their original location after logging in.
+  playerJoinTp_AutoBack: false
+
+
+# --------------[ 未登录玩家限制配置 | Pre-Login Restriction Settings ]--------------
+# 未登录玩家限制
+# Restrictions for players who have not yet logged in.
+notLoggedInPlayerLimit:
+
+  # 总开关
+  # Master switch to enable or disable pre-login restrictions.
+  enabled: true
+
+  # 限制类型，true为限制，false为不限制
+  # Restriction settings. Set to 'true' to enable the restriction, 'false' to disable.
+  type:
+    # 禁止玩家移动
+    # Prevent players from moving.
+    move: true
+    # 禁止玩家放置方块
+    # Prevent players from placing blocks.
+    blockPlace: true
+    # 禁止玩家破坏方块
+    # Prevent players from breaking blocks.
+    blockBreak: true
+    # 禁止玩家与方块交互
+    # Prevent players from interacting with blocks.
+    blockInteract: true
+    # 禁止玩家聊天
+    # Prevent players from chatting.
+    chat: true
+    # 禁止玩家使用命令
+    # Prevent players from using commands.
+    command: true
+    # 允许玩家使用的命令，仅在 'command' 设置为 true 时生效
+    # Whitelisted commands that can be used even when 'command' is set to true.
+    commandWhitelist:
+      - "/login"
+      - "/register"
+    # 禁止玩家使用物品
+    # Prevent players from using items.
+    itemUse: true

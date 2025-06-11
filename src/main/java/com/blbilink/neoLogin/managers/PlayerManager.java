@@ -1,8 +1,11 @@
 package com.blbilink.neoLogin.managers;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
+import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -16,6 +19,9 @@ public class PlayerManager {
 
     // 使用 Set 存储已登录玩家的 UUID，提供 O(1) 的平均时间复杂度用于增删查操作。
     private final Set<UUID> loggedInPlayers = new HashSet<>();
+
+    // 用于缓存玩家原始位置的 Map
+    private final Map<UUID, Location> originalLocations = new HashMap<>();
 
     /**
      * 将玩家标记为已登录状态。
@@ -51,5 +57,25 @@ public class PlayerManager {
      */
     public void clearLoggedInPlayers() {
         loggedInPlayers.clear();
+    }
+
+    /**
+     * 缓存玩家的原始位置。
+     * 这应该在玩家因未登录而被传送到登录点之前调用。
+     * @param uuid 玩家的 UUID
+     * @param location 要缓存的原始位置
+     */
+    public void cacheOriginalLocation(UUID uuid, Location location) {
+        originalLocations.put(uuid, location);
+    }
+
+    /**
+     * 获取并移除玩家缓存的原始位置。
+     * 使用 "get and remove" 的模式可以确保该位置只被使用一次。
+     * @param uuid 玩家的 UUID
+     * @return 玩家的原始位置，如果没有缓存则返回 null
+     */
+    public Location getAndRemoveOriginalLocation(UUID uuid) {
+        return originalLocations.remove(uuid);
     }
 }
