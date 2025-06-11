@@ -5,6 +5,8 @@ import com.blbilink.neoLibrary.utils.FoliaUtil;
 import com.blbilink.neoLibrary.utils.I18n;
 import com.blbilink.neoLibrary.utils.Metrics;
 import com.blbilink.neoLibrary.utils.TextUtil;
+import com.blbilink.neoLogin.listeners.PlayerMoveLisnter;
+import com.blbilink.neoLogin.managers.PlayerManager;
 
 import java.util.Collections;
 
@@ -27,10 +29,17 @@ public final class NeoLogin extends JavaPlugin {
         FileConfiguration config = mainConfig.getConfig();
 
         String prefix = config.getString("prefix");
-        String lang = config.getString("language", "zh_CN"); // "zh_CN" 作为默认值
+        String lang = config.getString("language", "zh_CN");
 
         I18n i18n = new I18n(this, prefix, lang);
         i18n.loadLanguage();
+
+        registerEvents();
+    }
+
+    private void registerEvents() {
+        PlayerManager playerManager = new PlayerManager();
+        getServer().getPluginManager().registerEvents(new PlayerMoveLisnter(playerManager), this);
     }
 
     @Override

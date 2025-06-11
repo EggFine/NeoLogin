@@ -1,0 +1,3 @@
+version: 1.0.0
+Language: "English (United States)"
+loadedLanguage: "Loaded language file: %s"
