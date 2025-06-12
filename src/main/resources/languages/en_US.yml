@@ -11,3 +11,12 @@ login:
   success: "&aLogin successful, welcome back!"
   teleportBack: "&aYou have been teleported back to your previous location."
   wrongPassword: "&cIncorrect password, please try again!"
+
+# Register command related messages
+register:
+  alreadyRegistered: "&cYou are already registered, please use /login <password> to log in."
+  usage: "&eUsage: /register <password> <repeat password>"
+  passwordMismatch: "&cThe two passwords entered do not match!"
+  passwordTooShort: "&cFor your account security, password length cannot be less than 6 characters."
+  success: "&aCongratulations, registration successful and you are automatically logged in!"
+  error: "&cAn unknown error occurred during registration, please contact the administrator."

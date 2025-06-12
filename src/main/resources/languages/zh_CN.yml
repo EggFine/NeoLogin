@@ -12,3 +12,12 @@ login:
   teleportBack: "&a已将您传送回之前的位置。"
   wrongPassword: "&c密码错误，请重试！"
 
+# 注册命令相关消息
+register:
+  alreadyRegistered: "&c您已经注册过了，请使用 /login <密码> 来登录。"
+  usage: "&e用法: /register <密码> <重复密码>"
+  passwordMismatch: "&c两次输入的密码不一致！"
+  passwordTooShort: "&c为了您的账户安全，密码长度不能少于6位。"
+  success: "&a恭喜您，注册成功并已自动登录！"
+  error: "&c注册时发生未知错误，请联系管理员。"
+
