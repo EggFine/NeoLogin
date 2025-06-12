@@ -4,9 +4,11 @@ import com.blbilink.neoLibrary.utils.FoliaUtil;
 import com.blbilink.neoLibrary.utils.I18n;
 import com.blbilink.neoLibrary.utils.Metrics;
 import com.blbilink.neoLibrary.utils.TextUtil;
+import com.blbilink.neoLogin.dao.UserDAO;
 import com.blbilink.neoLogin.listeners.AutoTeleportListener;
-import com.blbilink.neoLogin.listeners.PlayerMoveListener; // 修正了类名
+import com.blbilink.neoLogin.listeners.PlayerMoveListener;
 import com.blbilink.neoLogin.managers.ConfigManager;
+import com.blbilink.neoLogin.managers.DatabaseManager;
 import com.blbilink.neoLogin.managers.PlayerManager;
 
 import java.util.Collections;
@@ -19,6 +21,7 @@ public final class NeoLogin extends JavaPlugin {
     private I18n i18n;
     private ConfigManager configManager;
     private PlayerManager playerManager;
+    private UserDAO userDAO;
 
     @Override
     public void onEnable() {
@@ -39,6 +42,9 @@ public final class NeoLogin extends JavaPlugin {
 
         // 初始化玩家登录状态管理器
         playerManager = new PlayerManager();
+
+        // 初始化用户数据访问对象
+        userDAO = new UserDAO(new DatabaseManager(this));
 
         // 注册事件监听器
         registerListeners();
@@ -69,5 +75,9 @@ public final class NeoLogin extends JavaPlugin {
     
     public FoliaUtil getFoliaUtil() {
         return foliaUtil;
+    }
+
+    public UserDAO getUserDAO() {
+        return userDAO;
     }
 }

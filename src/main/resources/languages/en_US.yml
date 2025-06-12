@@ -1,3 +1,13 @@
 version: 1.0.0
 Language: "English (United States)"
 loadedLanguage: "Loaded language file: %s"
+
+# Login command related messages
+login:
+  onlyPlayer: "&cThis command can only be executed by players."
+  alreadyLoggedIn: "&aYou are already logged in, no need to repeat this action."
+  notRegistered: "&cYou are not registered yet, please use /register <password> <repeat password> to register."
+  usage: "&eUsage: /login <password>"
+  success: "&aLogin successful, welcome back!"
+  teleportBack: "&aYou have been teleported back to your previous location."
+  wrongPassword: "&cIncorrect password, please try again!"

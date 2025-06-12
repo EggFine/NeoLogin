@@ -1,14 +1,15 @@
 package com.blbilink.neoLogin.managers;
 
-import com.blbilink.neoLibrary.utils.ConfigUtil;
+import com.blbilink.neoLibrary.utils.ConfigUtil; //
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.List;
 import java.util.Collections;
+import java.util.List;
 
 public class ConfigManager {
 
@@ -18,6 +19,9 @@ public class ConfigManager {
     // General
     private String prefix;
     private String language;
+
+    // Database
+    private ConfigurationSection databaseSection;
 
     // Auto Teleport
     private boolean autoTeleportEnabled;
@@ -43,7 +47,7 @@ public class ConfigManager {
      */
     public ConfigManager(JavaPlugin plugin) {
         this.plugin = plugin;
-        // 使用 NeoLibrary 的 ConfigUtil 来加载 config.yml
+        // 使用 NeoLibrary 的 ConfigUtil 来加载和自动更新 config.yml
         ConfigUtil configUtil = new ConfigUtil(plugin, "config.yml");
         this.config = configUtil.getConfig();
         // 加载并缓存所有配置值
@@ -57,6 +61,10 @@ public class ConfigManager {
         // [插件配置]
         prefix = config.getString("prefix", "§8[§fNeo§bLogin§8] §f");
         language = config.getString("language", "zh_CN");
+
+        // [数据库配置]
+        // 获取数据库的整个配置段，方便后续传递给 DatabaseUtil
+        databaseSection = config.getConfigurationSection("database"); 
 
         // [自动传送配置]
         autoTeleportEnabled = config.getBoolean("autoTeleport.enabled", false);
@@ -83,7 +91,7 @@ public class ConfigManager {
     private void loadTeleportLocation() {
         String worldName = config.getString("autoTeleport.locationPos.world");
         // 检查世界名称是否有效
-        if (worldName == null || worldName.isEmpty() || worldName.isBlank()) {
+        if (worldName == null || worldName.isEmpty()) {
             teleportLocation = null;
             return;
         }
@@ -108,6 +116,19 @@ public class ConfigManager {
 
     public String getPrefix() { return prefix; }
     public String getLanguage() { return language; }
+
+    /**
+     * 获取数据库配置段。
+     * <p>
+     * 你可以将此对象直接传递给 NeoLibrary 的 DatabaseUtil 进行初始化。
+     * 例如: {@code new DatabaseUtil(plugin).initialize(configManager.getDatabaseSection());}
+     *
+     * @return 数据库配置段 (ConfigurationSection)
+     */
+    public ConfigurationSection getDatabaseSection() {
+        return databaseSection;
+    }
+
     public boolean isAutoTeleportEnabled() { return autoTeleportEnabled; }
     public boolean isAutoTeleportOnJoin() { return autoTeleportOnJoin; }
     public boolean isAutoTeleportOnDeath() { return autoTeleportOnDeath; }

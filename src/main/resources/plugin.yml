@@ -1,6 +1,8 @@
 name: NeoLogin
 version: '${version}'
 main: com.blbilink.neoLogin.NeoLogin
+author: EggFine[blbilink]
+description: NeoLogin is a plugin that requires players to login to play. It is NEXT GENERATION of blbiLogin.
 api-version: '1.21'
 folia-supported: true
 load: STARTUP
@@ -8,3 +10,23 @@ depend:
   - NeoLibrary
 START-AFTER:
   - NeoLibrary
+
+
+commands:
+  login:
+    description: "login command"
+    usage: "/login"
+    aliases:
+      - "l"
+  register:
+    description: "register command"
+    usage: "/register"
+    aliases:
+      - "reg"
+  neologin:
+    description: "neologin command"
+    usage: "/neologin"
+    aliases:
+      - "nl"
+    permissions:
+      - "neologin.admin"
