@@ -4,6 +4,11 @@
 
 **NeoLogin** 是基于 Minecraft 1.21.1 Spigot/Paper 核心开发的现代化玩家登录插件解决方案，继承并改进了 [blbiLogin](https://github.com/EggFine/blbiLogin) 的核心功能。
 
+```
+⚠️ **警告**：最新的 Release 仍处于不可用阶段，仅可进行开发测试，**不可用于生产环境**，您可以前往下载 [blbiLogin](https://github.com/EggFine/blbiLogin) 体验完善的，稳定的登录插件
+```
+
+
 ---
 
 ## ✨ 特性
