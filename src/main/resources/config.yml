@@ -73,6 +73,28 @@ autoTeleport:
   # Whether to teleport the player back to their original location after logging in.
   playerJoinTp_AutoBack: false
 
+# --------------[ 注册配置 | Register Settings ]--------------
+# 注册配置
+register:
+  # 允许玩家注册
+  # Allow players to register.
+  enabled: true
+  # 注册密码长度限制
+  # Password length limit for registration.
+  passwordLength: 15
+  # 注册密码最小长度
+  # Minimum password length for registration.
+  passwordMinLength: 1
+  # 需要再次确认密码 /register <密码> <确认密码>
+  # Need to confirm the password /register <password> <confirmPassword>
+  # 如果关闭，则只需要执行 /register <密码> 即可
+  # If disabled, only /register <password> is required.
+  confirmPassword: true
+  # 注册成功后是否自动登录
+  # Automatically login after registration.
+  autoLogin: true
+
+
 
 # --------------[ 未登录玩家限制配置 | Pre-Login Restriction Settings ]--------------
 # 未登录玩家限制
