@@ -1,5 +1,13 @@
 # NeoLogin
 
+<div align="center">
+
+**语言 | Language**
+
+[简体中文](README.md) | [English](README_en_US.md)
+
+</div>
+
 ## NeoLogin 是下一代 blbiLogin
 
 **NeoLogin** 是基于 Minecraft 1.21.1 Spigot/Paper 核心开发的现代化玩家登录插件解决方案，继承并改进了 [blbiLogin](https://github.com/EggFine/blbiLogin) 的核心功能。
