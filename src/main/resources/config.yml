@@ -137,3 +137,6 @@ notLoggedInPlayerLimit:
     # 禁止玩家受到伤害
     # Prevent players from taking damage.
     damage: true
+    # 禁止玩家攻击
+    # Prevent players from attacking.
+    attack: true

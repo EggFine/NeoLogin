@@ -48,6 +48,7 @@ public class ConfigManager {
     private List<String> commandWhitelist;
     private boolean limitItemUse;
     private boolean limitDamage;
+    private boolean limitAttacking;
 
     /**
      * 构造函数，初始化时会自动加载和解析配置文件。
@@ -99,6 +100,7 @@ public class ConfigManager {
         commandWhitelist = config.getStringList("notLoggedInPlayerLimit.type.commandWhitelist");
         limitItemUse = config.getBoolean("notLoggedInPlayerLimit.type.itemUse", true);
         limitDamage = config.getBoolean("notLoggedInPlayerLimit.type.damage", true);
+        limitAttacking = config.getBoolean("notLoggedInPlayerLimit.type.attacking", true);
     }
 
     /**
