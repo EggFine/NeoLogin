@@ -30,6 +30,13 @@ public class ConfigManager {
     private Location teleportLocation;
     private boolean autoTeleportBack;
 
+    // Register
+    private boolean registerEnabled;
+    private int registerPasswordLength;
+    private int registerPasswordMinLength;
+    private boolean registerConfirmPassword;
+    private boolean registerAutoLogin;
+
     // Not Logged In Player Limit
     private boolean notLoggedInLimitEnabled;
     private boolean limitMove;
@@ -40,6 +47,7 @@ public class ConfigManager {
     private boolean limitCommand;
     private List<String> commandWhitelist;
     private boolean limitItemUse;
+    private boolean limitDamage;
 
     /**
      * 构造函数，初始化时会自动加载和解析配置文件。
@@ -73,6 +81,13 @@ public class ConfigManager {
         loadTeleportLocation();
         autoTeleportBack = config.getBoolean("autoTeleport.playerJoinTp_AutoBack", false);
 
+        // [注册相关配置]
+        registerEnabled = config.getBoolean("register.enabled", true);
+        registerPasswordLength = config.getInt("register.passwordLength", 15);
+        registerPasswordMinLength = config.getInt("register.passwordMinLength", 1);
+        registerConfirmPassword = config.getBoolean("register.confirmPassword", true);
+        registerAutoLogin = config.getBoolean("register.autoLogin", true);
+
         // [未登录玩家限制配置]
         notLoggedInLimitEnabled = config.getBoolean("notLoggedInPlayerLimit.enabled", true);
         limitMove = config.getBoolean("notLoggedInPlayerLimit.type.move", true);
@@ -83,6 +98,7 @@ public class ConfigManager {
         limitCommand = config.getBoolean("notLoggedInPlayerLimit.type.command", true);
         commandWhitelist = config.getStringList("notLoggedInPlayerLimit.type.commandWhitelist");
         limitItemUse = config.getBoolean("notLoggedInPlayerLimit.type.itemUse", true);
+        limitDamage = config.getBoolean("notLoggedInPlayerLimit.type.damage", true);
     }
 
     /**

@@ -6,6 +6,8 @@ import com.blbilink.neoLibrary.utils.Metrics;
 import com.blbilink.neoLibrary.utils.TextUtil;
 import com.blbilink.neoLogin.dao.UserDAO;
 import com.blbilink.neoLogin.listeners.AutoTeleportListener;
+import com.blbilink.neoLogin.listeners.LoginReminderListener;
+import com.blbilink.neoLogin.listeners.PlayerConnectListener;
 import com.blbilink.neoLogin.listeners.PlayerMoveListener;
 import com.blbilink.neoLogin.managers.ConfigManager;
 import com.blbilink.neoLogin.managers.DatabaseManager;
@@ -54,6 +56,8 @@ public final class NeoLogin extends JavaPlugin {
         // 注册监听器
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(this), this);
         getServer().getPluginManager().registerEvents(new AutoTeleportListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerConnectListener(this), this);
+        getServer().getPluginManager().registerEvents(new LoginReminderListener(this), this);       
     }
 
     @Override
@@ -80,4 +84,6 @@ public final class NeoLogin extends JavaPlugin {
     public UserDAO getUserDAO() {
         return userDAO;
     }
+
+
 }

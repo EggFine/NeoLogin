@@ -134,3 +134,6 @@ notLoggedInPlayerLimit:
     # 禁止玩家使用物品
     # Prevent players from using items.
     itemUse: true
+    # 禁止玩家受到伤害
+    # Prevent players from taking damage.
+    damage: true

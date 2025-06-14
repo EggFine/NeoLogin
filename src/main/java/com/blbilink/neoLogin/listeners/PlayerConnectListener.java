@@ -10,12 +10,11 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 
-public class PlayerListener implements Listener {
-
+public class PlayerConnectListener implements Listener {
     private final PlayerManager playerManager;
     private final ConfigManager configManager;
 
-    public PlayerListener(NeoLogin plugin) {
+    public PlayerConnectListener(NeoLogin plugin) {
         this.playerManager = plugin.getPlayerManager();
         this.configManager = plugin.getConfigManager();
     }
