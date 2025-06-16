@@ -161,4 +161,6 @@ public class ConfigManager {
     public boolean isLimitCommand() { return limitCommand; }
     public List<String> getCommandWhitelist() { return Collections.unmodifiableList(commandWhitelist); } // 返回一个不可修改的列表，更安全
     public boolean isLimitItemUse() { return limitItemUse; }
+    public boolean isLimitDamage() { return limitDamage; }
+    public boolean isLimitAttacking() { return limitAttacking; }
 }

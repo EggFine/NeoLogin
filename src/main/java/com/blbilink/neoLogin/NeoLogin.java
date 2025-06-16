@@ -4,6 +4,8 @@ import com.blbilink.neoLibrary.utils.FoliaUtil;
 import com.blbilink.neoLibrary.utils.I18n;
 import com.blbilink.neoLibrary.utils.Metrics;
 import com.blbilink.neoLibrary.utils.TextUtil;
+import com.blbilink.neoLogin.commands.LoginCommand;
+import com.blbilink.neoLogin.commands.RegisterCommand;
 import com.blbilink.neoLogin.dao.UserDAO;
 import com.blbilink.neoLogin.listeners.AutoTeleportListener;
 import com.blbilink.neoLogin.listeners.LoginReminderListener;
@@ -50,6 +52,9 @@ public final class NeoLogin extends JavaPlugin {
 
         // 注册事件监听器
         registerListeners();
+
+        // 注册命令
+        registerCommands();
     }
 
     private void registerListeners() {
@@ -58,6 +63,11 @@ public final class NeoLogin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new AutoTeleportListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerConnectListener(this), this);
         getServer().getPluginManager().registerEvents(new LoginReminderListener(this), this);       
+    }
+
+    private void registerCommands() {
+        getCommand("login").setExecutor(new LoginCommand(this));
+        getCommand("register").setExecutor(new RegisterCommand(this));
     }
 
     @Override
