@@ -9,7 +9,9 @@ import com.blbilink.neoLogin.commands.RegisterCommand;
 import com.blbilink.neoLogin.dao.UserDAO;
 import com.blbilink.neoLogin.listeners.AutoTeleportListener;
 import com.blbilink.neoLogin.listeners.LoginReminderListener;
+import com.blbilink.neoLogin.listeners.PlayerAttackListener;
 import com.blbilink.neoLogin.listeners.PlayerConnectListener;
+import com.blbilink.neoLogin.listeners.PlayerDamageListener;
 import com.blbilink.neoLogin.listeners.PlayerMoveListener;
 import com.blbilink.neoLogin.managers.ConfigManager;
 import com.blbilink.neoLogin.managers.DatabaseManager;
@@ -26,7 +28,7 @@ public final class NeoLogin extends JavaPlugin {
     private ConfigManager configManager;
     private PlayerManager playerManager;
     private UserDAO userDAO;
-
+    private DatabaseManager databaseManager;
     @Override
     public void onEnable() {
         getLogger().info(TextUtil.getLogo("Loading...", "NeoLogin", "The Next Generation blbiLogin\nSpigotMC: https://www.spigotmc.org/resources/125813/", this, Collections.singletonList("EggFine"), null));
@@ -47,8 +49,12 @@ public final class NeoLogin extends JavaPlugin {
         // 初始化玩家登录状态管理器
         playerManager = new PlayerManager();
 
-        // 初始化用户数据访问对象
-        userDAO = new UserDAO(new DatabaseManager(this));
+        // 初始化数据库
+        databaseManager = new DatabaseManager(this);
+        databaseManager.init();
+
+        // 初始化用户数据访问对象（使用已初始化的数据库管理器）
+        userDAO = new UserDAO(databaseManager);
 
         // 注册事件监听器
         registerListeners();
@@ -63,6 +69,8 @@ public final class NeoLogin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new AutoTeleportListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerConnectListener(this), this);
         getServer().getPluginManager().registerEvents(new LoginReminderListener(this), this);       
+        getServer().getPluginManager().registerEvents(new PlayerAttackListener(this), this);
+        getServer().getPluginManager().registerEvents(new PlayerDamageListener(this), this);
     }
 
     private void registerCommands() {
@@ -72,7 +80,10 @@ public final class NeoLogin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // 插件关闭逻辑
+        // 关闭数据库连接池
+        if (databaseManager != null) {
+            databaseManager.close();
+        }
     }
     
     public ConfigManager getConfigManager() {
@@ -95,5 +106,8 @@ public final class NeoLogin extends JavaPlugin {
         return userDAO;
     }
 
+    public DatabaseManager getDatabaseManager() {
+        return databaseManager;
+    }
 
 }

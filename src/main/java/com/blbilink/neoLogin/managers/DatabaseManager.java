@@ -58,7 +58,7 @@ public class DatabaseManager {
                 + "last_login_date BIGINT"
                 + ");";
         try {
-            // 修正 2: 使用 executeUpdate 方法
+            // 使用 executeUpdate 方法
             databaseUtil.executeUpdate(createTableSQL);
             plugin.getLogger().info("数据表结构已验证/创建。");
         } catch (SQLException e) {
