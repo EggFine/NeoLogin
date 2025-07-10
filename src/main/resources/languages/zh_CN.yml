@@ -4,6 +4,10 @@ loadedLanguage: "已加载语言文件: %s"
 
 # 登录命令相关消息
 login:
+  noLoginMessage: "您当前§c未登录§f, 操作可能受限, 使用 /login <密码> 进行登录！"
+  noLoginTitle: "§l欢迎回到§fNeo§bWorld§f!"
+  noLoginSubtitle: "请使用 §6/login <密码>§f 登录游戏"
+  noLoginActionbar: "您当前§c未登录§f, 操作可能受限, 使用 /login <密码> 进行登录"
   onlyPlayer: "&c该指令只能由玩家执行。"
   alreadyLoggedIn: "&a您已经登录了，无需重复操作。"
   notRegistered: "&c您尚未注册，请使用 /register <密码> <重复密码> 进行注册。"
@@ -14,6 +18,12 @@ login:
 
 # 注册命令相关消息
 register:
+  noRegisterMessage: "您当前§c未注册§f, 操作可能受限, 使用 /register <密码> 进行注册！"
+  noRegisterMessage2: "您当前§c未注册§f, 操作可能受限, 使用 /register <密码> <重复密码> 进行注册！"
+  noRegisterTitle: "§l欢迎来到§fNeo§bWorld§f!"
+  noRegisterSubtitle: "请使用 §6/register <密码>§f 注册游戏"
+  noRegisterActionbar: "您当前§c未注册§f, 操作可能受限, 使用 /register <密码> 进行注册"
+  noRegisterActionbar2: "您当前§c未注册§f, 操作可能受限, 使用 /register <密码> <重复密码> 进行注册"
   alreadyRegistered: "&c您已经注册过了，请使用 /login <密码> 来登录。"
   usage: "&e用法: /register <密码> <重复密码>"
   passwordMismatch: "&c两次输入的密码不一致！"

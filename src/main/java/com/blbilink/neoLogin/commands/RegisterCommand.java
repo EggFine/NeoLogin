@@ -5,6 +5,8 @@ import com.blbilink.neoLogin.NeoLogin;
 import com.blbilink.neoLogin.dao.UserDAO;
 import com.blbilink.neoLogin.managers.ConfigManager;
 import com.blbilink.neoLogin.managers.PlayerManager;
+
+import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -41,9 +43,35 @@ public class RegisterCommand implements CommandExecutor {
             return true;
         }
 
+        if (configManager.isRegisterConfirmPassword()) {
+            registerWithConfirmPassword(player, args);
+        } else {
+            register(player, args);
+        }
+
+        return true;
+    }
+
+    private void register(Player player, String[] args) {
+        if (args.length != 1) {
+            player.sendMessage(i18n.as("register.usage", true));
+            return;
+        }
+
+        String password = args[0];
+
+        if (password.length() < 6) {
+            player.sendMessage(i18n.as("register.passwordTooShort", true));
+            return;
+        }
+
+        performRegistration(player, password);
+    }
+
+    private void registerWithConfirmPassword(Player player, String[] args) {
         if (args.length != 2) {
             player.sendMessage(i18n.as("register.usage", true));
-            return true;
+            return;
         }
 
         String password = args[0];
@@ -51,14 +79,18 @@ public class RegisterCommand implements CommandExecutor {
 
         if (!password.equals(confirmPassword)) {
             player.sendMessage(i18n.as("register.passwordMismatch", true));
-            return true;
+            return;
         }
 
         if (password.length() < 6) {
             player.sendMessage(i18n.as("register.passwordTooShort", true));
-            return true;
+            return;
         }
 
+        performRegistration(player, password);
+    }
+
+    private void performRegistration(Player player, String password) {
         String ipAddress = player.getAddress() != null ? player.getAddress().getAddress().getHostAddress() : "N/A";
 
         plugin.getFoliaUtil().runTaskAsync(() -> {
@@ -66,8 +98,12 @@ public class RegisterCommand implements CommandExecutor {
 
             plugin.getFoliaUtil().runTask(() -> {
                 if (success) {
-                    playerManager.setLoggedIn(player); // 注册成功后自动登录
+                    playerManager.setLoggedIn(player);
                     player.sendMessage(i18n.as("register.success", true));
+                    if (!player.getGameMode().equals(GameMode.CREATIVE) && !player.isOp()) {
+                        player.setFlying(false);
+                        player.setAllowFlight(false);
+                    }
                     if (configManager.isRegisterReward()) {
                         playerManager.giveRegisterReward(player);
                     }
@@ -76,7 +112,5 @@ public class RegisterCommand implements CommandExecutor {
                 }
             });
         });
-
-        return true;
     }
 }

@@ -49,15 +49,15 @@ public final class NeoLogin extends JavaPlugin {
         i18n = new I18n(this, configManager.getPrefix(), configManager.getLanguage());
         i18n.loadLanguage();
 
-        // 初始化玩家登录状态管理器
-        playerManager = new PlayerManager(this);
-
         // 初始化数据库
         databaseManager = new DatabaseManager(this);
         databaseManager.init();
 
         // 初始化用户数据访问对象（使用已初始化的数据库管理器）
         userDAO = new UserDAO(databaseManager);
+
+        // 初始化玩家登录状态管理器
+        playerManager = new PlayerManager(this);
 
         // 注册事件监听器
         registerListeners();

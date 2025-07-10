@@ -223,4 +223,8 @@ public class ConfigManager {
     public boolean isRegisterReward() {
         return registerGiveReward;
     }
+
+    public boolean isRegisterConfirmPassword() {
+        return registerConfirmPassword;
+    }
 }

@@ -7,6 +7,7 @@ import org.bukkit.inventory.ItemStack;
 
 import com.blbilink.neoLibrary.utils.I18n;
 import com.blbilink.neoLogin.NeoLogin;
+import com.blbilink.neoLogin.dao.UserDAO;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -22,6 +23,7 @@ import java.util.UUID;
  */
 public class PlayerManager {
     private final I18n i18n;
+    private final UserDAO userDAO;
 
     // 使用 Set 存储已登录玩家的 UUID，提供 O(1) 的平均时间复杂度用于增删查操作。
     private final Set<UUID> loggedInPlayers = new HashSet<>();
@@ -31,6 +33,7 @@ public class PlayerManager {
 
     public PlayerManager(NeoLogin plugin) {
         this.i18n = plugin.getI18n();
+        this.userDAO = plugin.getUserDAO();
     }
 
     /**
@@ -59,6 +62,15 @@ public class PlayerManager {
      */
     public boolean isLoggedIn(Player player) {
         return loggedInPlayers.contains(player.getUniqueId());
+    }
+
+    /**
+     * 检查玩家是否已注册
+     * @param player 要检查的玩家对象
+     * @return 如果玩家已注册，则返回 true，否则返回 false
+     */
+    public boolean isRegistered(Player player) {
+        return userDAO.isRegistered(player.getUniqueId());
     }
 
     /**

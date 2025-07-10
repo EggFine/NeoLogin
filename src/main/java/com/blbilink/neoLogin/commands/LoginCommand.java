@@ -5,6 +5,8 @@ import com.blbilink.neoLogin.NeoLogin;
 import com.blbilink.neoLogin.dao.UserDAO;
 import com.blbilink.neoLogin.managers.ConfigManager;
 import com.blbilink.neoLogin.managers.PlayerManager;
+
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -64,6 +66,10 @@ public class LoginCommand implements CommandExecutor {
                 if (success) {
                     playerManager.setLoggedIn(player); // 标记为已登录
                     player.sendMessage(i18n.as("login.success", true));
+                    if(!player.getGameMode().equals(GameMode.CREATIVE) && !player.isOp()){
+                        player.setFlying(false);
+                        player.setAllowFlight(false);
+                    }
 
                     // 检查是否需要传送回原位
                     if (configManager.isAutoTeleportBack()) {
