@@ -93,6 +93,10 @@ register:
   # 注册成功后是否自动登录
   # Automatically login after registration.
   autoLogin: true
+  # 注册成功后给予的物品
+  # The item to give to the player after registration.
+  reward:
+    enable: false
 
 
 

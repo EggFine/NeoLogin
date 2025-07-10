@@ -3,6 +3,7 @@ package com.blbilink.neoLogin.commands;
 import com.blbilink.neoLibrary.utils.I18n;
 import com.blbilink.neoLogin.NeoLogin;
 import com.blbilink.neoLogin.dao.UserDAO;
+import com.blbilink.neoLogin.managers.ConfigManager;
 import com.blbilink.neoLogin.managers.PlayerManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -16,12 +17,14 @@ public class RegisterCommand implements CommandExecutor {
     private final UserDAO userDAO;
     private final PlayerManager playerManager;
     private final I18n i18n;
+    private final ConfigManager configManager;
 
     public RegisterCommand(NeoLogin plugin) {
         this.plugin = plugin;
         this.userDAO = plugin.getUserDAO();
-        this.playerManager = plugin.getPlayerManager(); // 使用新的 PlayerManager
+        this.playerManager = plugin.getPlayerManager();
         this.i18n = plugin.getI18n();
+        this.configManager = plugin.getConfigManager();
     }
 
     @Override
@@ -65,6 +68,9 @@ public class RegisterCommand implements CommandExecutor {
                 if (success) {
                     playerManager.setLoggedIn(player); // 注册成功后自动登录
                     player.sendMessage(i18n.as("register.success", true));
+                    if (configManager.isRegisterReward()) {
+                        playerManager.giveRegisterReward(player);
+                    }
                 } else {
                     player.sendMessage(i18n.as("register.error", true));
                 }

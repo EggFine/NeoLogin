@@ -36,6 +36,7 @@ public class ConfigManager {
     private int registerPasswordMinLength;
     private boolean registerConfirmPassword;
     private boolean registerAutoLogin;
+    private boolean registerGiveReward;
 
     // Not Logged In Player Limit
     private boolean notLoggedInLimitEnabled;
@@ -52,6 +53,7 @@ public class ConfigManager {
 
     /**
      * 构造函数，初始化时会自动加载和解析配置文件。
+     * 
      * @param plugin 插件主类的实例
      */
     public ConfigManager(JavaPlugin plugin) {
@@ -73,7 +75,7 @@ public class ConfigManager {
 
         // [数据库配置]
         // 获取数据库的整个配置段，方便后续传递给 DatabaseUtil
-        databaseSection = config.getConfigurationSection("database"); 
+        databaseSection = config.getConfigurationSection("database");
 
         // [自动传送配置]
         autoTeleportEnabled = config.getBoolean("autoTeleport.enabled", false);
@@ -88,6 +90,7 @@ public class ConfigManager {
         registerPasswordMinLength = config.getInt("register.passwordMinLength", 1);
         registerConfirmPassword = config.getBoolean("register.confirmPassword", true);
         registerAutoLogin = config.getBoolean("register.autoLogin", true);
+        registerGiveReward = config.getBoolean("register.reward.enable", false);
 
         // [未登录玩家限制配置]
         notLoggedInLimitEnabled = config.getBoolean("notLoggedInPlayerLimit.enabled", true);
@@ -128,18 +131,24 @@ public class ConfigManager {
         float pitch = (float) config.getDouble("autoTeleport.locationPos.pitch");
         teleportLocation = new Location(world, x, y, z, yaw, pitch);
     }
-    
+
     // --- Getters ---
     // 通过这些方法，插件的其他部分可以安全地获取配置值
 
-    public String getPrefix() { return prefix; }
-    public String getLanguage() { return language; }
+    public String getPrefix() {
+        return prefix;
+    }
+
+    public String getLanguage() {
+        return language;
+    }
 
     /**
      * 获取数据库配置段。
      * <p>
-     * 你可以将此对象直接传递给 NeoLibrary 的 DatabaseUtil 进行初始化。
-     * 例如: {@code new DatabaseUtil(plugin).initialize(configManager.getDatabaseSection());}
+     * 可以将此对象直接传递给 NeoLibrary 的 DatabaseUtil 进行初始化。
+     * 例如:
+     * {@code new DatabaseUtil(plugin).initialize(configManager.getDatabaseSection());}
      *
      * @return 数据库配置段 (ConfigurationSection)
      */
@@ -147,20 +156,71 @@ public class ConfigManager {
         return databaseSection;
     }
 
-    public boolean isAutoTeleportEnabled() { return autoTeleportEnabled; }
-    public boolean isAutoTeleportOnJoin() { return autoTeleportOnJoin; }
-    public boolean isAutoTeleportOnDeath() { return autoTeleportOnDeath; }
-    public Location getTeleportLocation() { return teleportLocation; }
-    public boolean isAutoTeleportBack() { return autoTeleportBack; }
-    public boolean isNotLoggedInLimitEnabled() { return notLoggedInLimitEnabled; }
-    public boolean isLimitMove() { return limitMove; }
-    public boolean isLimitBlockPlace() { return limitBlockPlace; }
-    public boolean isLimitBlockBreak() { return limitBlockBreak; }
-    public boolean isLimitBlockInteract() { return limitBlockInteract; }
-    public boolean isLimitChat() { return limitChat; }
-    public boolean isLimitCommand() { return limitCommand; }
-    public List<String> getCommandWhitelist() { return Collections.unmodifiableList(commandWhitelist); } // 返回一个不可修改的列表，更安全
-    public boolean isLimitItemUse() { return limitItemUse; }
-    public boolean isLimitDamage() { return limitDamage; }
-    public boolean isLimitAttacking() { return limitAttacking; }
+    public boolean isAutoTeleportEnabled() {
+        return autoTeleportEnabled;
+    }
+
+    public boolean isAutoTeleportOnJoin() {
+        return autoTeleportOnJoin;
+    }
+
+    public boolean isAutoTeleportOnDeath() {
+        return autoTeleportOnDeath;
+    }
+
+    public Location getTeleportLocation() {
+        return teleportLocation;
+    }
+
+    public boolean isAutoTeleportBack() {
+        return autoTeleportBack;
+    }
+
+    public boolean isNotLoggedInLimitEnabled() {
+        return notLoggedInLimitEnabled;
+    }
+
+    public boolean isLimitMove() {
+        return limitMove;
+    }
+
+    public boolean isLimitBlockPlace() {
+        return limitBlockPlace;
+    }
+
+    public boolean isLimitBlockBreak() {
+        return limitBlockBreak;
+    }
+
+    public boolean isLimitBlockInteract() {
+        return limitBlockInteract;
+    }
+
+    public boolean isLimitChat() {
+        return limitChat;
+    }
+
+    public boolean isLimitCommand() {
+        return limitCommand;
+    }
+
+    public List<String> getCommandWhitelist() {
+        return Collections.unmodifiableList(commandWhitelist);
+    } // 返回一个不可修改的列表，更安全
+
+    public boolean isLimitItemUse() {
+        return limitItemUse;
+    }
+
+    public boolean isLimitDamage() {
+        return limitDamage;
+    }
+
+    public boolean isLimitAttacking() {
+        return limitAttacking;
+    }
+
+    public boolean isRegisterReward() {
+        return registerGiveReward;
+    }
 }

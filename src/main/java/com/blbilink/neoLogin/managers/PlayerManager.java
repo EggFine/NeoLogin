@@ -1,7 +1,9 @@
 package com.blbilink.neoLogin.managers;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -77,5 +79,16 @@ public class PlayerManager {
      */
     public Location getAndRemoveOriginalLocation(UUID uuid) {
         return originalLocations.remove(uuid);
+    }
+
+    /**
+     * 给予注册成功的玩家物品
+     * @param player 玩家对象
+     */
+    public void giveRegisterReward(Player player) {
+        Material material = Material.NETHERITE_INGOT;
+        int amount = 20;
+        player.getInventory().addItem(new ItemStack(material, amount));
+        player.sendMessage("§a注册成功，获得 "+ amount +" 个"+ material.name());
     }
 }

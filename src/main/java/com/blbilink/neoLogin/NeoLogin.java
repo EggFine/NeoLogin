@@ -29,9 +29,12 @@ public final class NeoLogin extends JavaPlugin {
     private PlayerManager playerManager;
     private UserDAO userDAO;
     private DatabaseManager databaseManager;
+
     @Override
     public void onEnable() {
-        getLogger().info(TextUtil.getLogo("Loading...", "NeoLogin", "The Next Generation blbiLogin\nSpigotMC: https://www.spigotmc.org/resources/125813/", this, Collections.singletonList("EggFine"), null));
+        getLogger().info(TextUtil.getLogo("Loading...", "NeoLogin",
+                "The Next Generation blbiLogin\nSpigotMC: https://www.spigotmc.org/resources/125813/", this,
+                Collections.singletonList("EggFine"), null));
 
         // bStats Metrics
         new Metrics(this, 26113);
@@ -68,7 +71,7 @@ public final class NeoLogin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerMoveListener(this), this);
         getServer().getPluginManager().registerEvents(new AutoTeleportListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerConnectListener(this), this);
-        getServer().getPluginManager().registerEvents(new LoginReminderListener(this), this);       
+        getServer().getPluginManager().registerEvents(new LoginReminderListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerAttackListener(this), this);
         getServer().getPluginManager().registerEvents(new PlayerDamageListener(this), this);
     }
@@ -85,7 +88,7 @@ public final class NeoLogin extends JavaPlugin {
             databaseManager.close();
         }
     }
-    
+
     public ConfigManager getConfigManager() {
         return configManager;
     }
@@ -97,7 +100,7 @@ public final class NeoLogin extends JavaPlugin {
     public I18n getI18n() {
         return i18n;
     }
-    
+
     public FoliaUtil getFoliaUtil() {
         return foliaUtil;
     }
