@@ -5,6 +5,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
+import com.blbilink.neoLibrary.utils.I18n;
+import com.blbilink.neoLogin.NeoLogin;
+
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -18,12 +21,17 @@ import java.util.UUID;
  * 使用 UUID 来存储玩家信息，以避免因玩家对象被不当持有而导致的内存泄漏。
  */
 public class PlayerManager {
+    private final I18n i18n;
 
     // 使用 Set 存储已登录玩家的 UUID，提供 O(1) 的平均时间复杂度用于增删查操作。
     private final Set<UUID> loggedInPlayers = new HashSet<>();
 
     // 用于缓存玩家原始位置的 Map
     private final Map<UUID, Location> originalLocations = new HashMap<>();
+
+    public PlayerManager(NeoLogin plugin) {
+        this.i18n = plugin.getI18n();
+    }
 
     /**
      * 将玩家标记为已登录状态。
@@ -90,5 +98,6 @@ public class PlayerManager {
         int amount = 20;
         player.getInventory().addItem(new ItemStack(material, amount));
         player.sendMessage("§a注册成功，获得 "+ amount +" 个"+ material.name());
+        player.sendMessage(i18n.as("register.reward", true));
     }
 }
