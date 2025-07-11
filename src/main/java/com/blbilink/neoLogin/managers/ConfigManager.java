@@ -1,56 +1,30 @@
 package com.blbilink.neoLogin.managers;
 
-import com.blbilink.neoLibrary.utils.ConfigUtil; //
-import org.bukkit.Bukkit;
+import com.blbilink.neoLibrary.utils.ConfigUtil;
+import com.blbilink.neoLogin.managers.config.*;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Collections;
 import java.util.List;
 
+/**
+ * 配置管理器，负责协调各个配置模块
+ * 重构后的版本，将配置按功能模块分离，提高代码可维护性
+ */
 public class ConfigManager {
 
     private final JavaPlugin plugin;
     private final FileConfiguration config;
 
-    // General
-    private String prefix;
-    private String language;
-
-    // Database
-    private ConfigurationSection databaseSection;
-
-    // Auto Teleport
-    private boolean autoTeleportEnabled;
-    private boolean autoTeleportOnJoin;
-    private boolean autoTeleportOnDeath;
-    private Location teleportLocation;
-    private boolean autoTeleportBack;
-
-    // Register
-    private boolean registerEnabled;
-    private int registerPasswordLength;
-    private int registerPasswordMinLength;
-    private boolean registerConfirmPassword;
-    private boolean registerAutoLogin;
-    private boolean registerGiveReward;
-
-    // Not Logged In Player Limit
-    private boolean notLoggedInLimitEnabled;
-    private boolean limitMove;
-    private boolean limitBlockPlace;
-    private boolean limitBlockBreak;
-    private boolean limitBlockInteract;
-    private boolean limitChat;
-    private boolean limitCommand;
-    private List<String> commandWhitelist;
-    private boolean limitItemUse;
-    private boolean limitDamage;
-    private boolean limitAttacking;
-
+    // 配置模块
+    private final BaseConfig baseConfig;
+    private final DatabaseConfig databaseConfig;
+    private final AutoTeleportConfig autoTeleportConfig;
+    private final RegisterConfig registerConfig;
+    private final PlayerLimitConfig playerLimitConfig;
+    private final LoginConfig loginConfig;
     /**
      * 构造函数，初始化时会自动加载和解析配置文件。
      * 
@@ -61,88 +35,40 @@ public class ConfigManager {
         // 使用 NeoLibrary 的 ConfigUtil 来加载和自动更新 config.yml
         ConfigUtil configUtil = new ConfigUtil(plugin, "config.yml");
         this.config = configUtil.getConfig();
+        
+        // 初始化配置模块
+        this.baseConfig = new BaseConfig();
+        this.databaseConfig = new DatabaseConfig();
+        this.autoTeleportConfig = new AutoTeleportConfig(plugin);
+        this.registerConfig = new RegisterConfig();
+        this.playerLimitConfig = new PlayerLimitConfig();
+        this.loginConfig = new LoginConfig();
         // 加载并缓存所有配置值
         loadAndCacheValues();
     }
 
     /**
-     * 从 FileConfiguration 对象中读取所有配置项并缓存到类的字段中。
+     * 从 FileConfiguration 对象中读取所有配置项并缓存到各配置模块中。
      */
     public void loadAndCacheValues() {
-        // [插件配置]
-        prefix = config.getString("prefix", "§8[§fNeo§bLogin§8] §f");
-        language = config.getString("language", "zh_CN");
-
-        // [数据库配置]
-        // 获取数据库的整个配置段，方便后续传递给 DatabaseUtil
-        databaseSection = config.getConfigurationSection("database");
-
-        // [自动传送配置]
-        autoTeleportEnabled = config.getBoolean("autoTeleport.enabled", false);
-        autoTeleportOnJoin = config.getBoolean("autoTeleport.on.join", false);
-        autoTeleportOnDeath = config.getBoolean("autoTeleport.on.death", false);
-        loadTeleportLocation();
-        autoTeleportBack = config.getBoolean("autoTeleport.playerJoinTp_AutoBack", false);
-
-        // [注册相关配置]
-        registerEnabled = config.getBoolean("register.enabled", true);
-        registerPasswordLength = config.getInt("register.passwordLength", 15);
-        registerPasswordMinLength = config.getInt("register.passwordMinLength", 1);
-        registerConfirmPassword = config.getBoolean("register.confirmPassword", true);
-        registerAutoLogin = config.getBoolean("register.autoLogin", true);
-        registerGiveReward = config.getBoolean("register.reward.enable", false);
-
-        // [未登录玩家限制配置]
-        notLoggedInLimitEnabled = config.getBoolean("notLoggedInPlayerLimit.enabled", true);
-        limitMove = config.getBoolean("notLoggedInPlayerLimit.type.move", true);
-        limitBlockPlace = config.getBoolean("notLoggedInPlayerLimit.type.blockPlace", true);
-        limitBlockBreak = config.getBoolean("notLoggedInPlayerLimit.type.blockBreak", true);
-        limitBlockInteract = config.getBoolean("notLoggedInPlayerLimit.type.blockInteract", true);
-        limitChat = config.getBoolean("notLoggedInPlayerLimit.type.chat", true);
-        limitCommand = config.getBoolean("notLoggedInPlayerLimit.type.command", true);
-        commandWhitelist = config.getStringList("notLoggedInPlayerLimit.type.commandWhitelist");
-        limitItemUse = config.getBoolean("notLoggedInPlayerLimit.type.itemUse", true);
-        limitDamage = config.getBoolean("notLoggedInPlayerLimit.type.damage", true);
-        limitAttacking = config.getBoolean("notLoggedInPlayerLimit.type.attacking", true);
+        baseConfig.load(config);
+        databaseConfig.load(config);
+        autoTeleportConfig.load(config);
+        registerConfig.load(config);
+        playerLimitConfig.load(config);
+        loginConfig.load(config);
     }
 
-    /**
-     * 解析配置文件中的坐标信息，并转换成 Bukkit 的 Location 对象。
-     */
-    private void loadTeleportLocation() {
-        String worldName = config.getString("autoTeleport.locationPos.world");
-        // 检查世界名称是否有效
-        if (worldName == null || worldName.isEmpty()) {
-            teleportLocation = null;
-            return;
-        }
-
-        World world = Bukkit.getWorld(worldName);
-        if (world == null) {
-            plugin.getLogger().warning("自动传送功能设置的世界 '" + worldName + "' 不存在或未加载！该功能可能无法正常工作。");
-            teleportLocation = null;
-            return;
-        }
-
-        double x = config.getDouble("autoTeleport.locationPos.x");
-        double y = config.getDouble("autoTeleport.locationPos.y");
-        double z = config.getDouble("autoTeleport.locationPos.z");
-        float yaw = (float) config.getDouble("autoTeleport.locationPos.yaw");
-        float pitch = (float) config.getDouble("autoTeleport.locationPos.pitch");
-        teleportLocation = new Location(world, x, y, z, yaw, pitch);
-    }
-
-    // --- Getters ---
-    // 通过这些方法，插件的其他部分可以安全地获取配置值
-
+    // --- 基础配置 Getters ---
     public String getPrefix() {
-        return prefix;
+        return baseConfig.getPrefix();
     }
 
     public String getLanguage() {
-        return language;
+        return baseConfig.getLanguage();
     }
 
+    // --- 数据库配置 Getters ---
     /**
      * 获取数据库配置段。
      * <p>
@@ -153,78 +79,149 @@ public class ConfigManager {
      * @return 数据库配置段 (ConfigurationSection)
      */
     public ConfigurationSection getDatabaseSection() {
-        return databaseSection;
+        return databaseConfig.getDatabaseSection();
     }
 
+    // --- 自动传送配置 Getters ---
     public boolean isAutoTeleportEnabled() {
-        return autoTeleportEnabled;
+        return autoTeleportConfig.isAutoTeleportEnabled();
     }
 
     public boolean isAutoTeleportOnJoin() {
-        return autoTeleportOnJoin;
+        return autoTeleportConfig.isAutoTeleportOnJoin();
     }
 
     public boolean isAutoTeleportOnDeath() {
-        return autoTeleportOnDeath;
+        return autoTeleportConfig.isAutoTeleportOnDeath();
     }
 
     public Location getTeleportLocation() {
-        return teleportLocation;
+        return autoTeleportConfig.getTeleportLocation();
     }
 
     public boolean isAutoTeleportBack() {
-        return autoTeleportBack;
+        return autoTeleportConfig.isAutoTeleportBack();
     }
 
-    public boolean isNotLoggedInLimitEnabled() {
-        return notLoggedInLimitEnabled;
+    // --- 注册配置 Getters ---
+    public boolean isRegisterEnabled() {
+        return registerConfig.isRegisterEnabled();
     }
 
-    public boolean isLimitMove() {
-        return limitMove;
+    public int getRegisterPasswordLength() {
+        return registerConfig.getRegisterPasswordLength();
     }
 
-    public boolean isLimitBlockPlace() {
-        return limitBlockPlace;
-    }
-
-    public boolean isLimitBlockBreak() {
-        return limitBlockBreak;
-    }
-
-    public boolean isLimitBlockInteract() {
-        return limitBlockInteract;
-    }
-
-    public boolean isLimitChat() {
-        return limitChat;
-    }
-
-    public boolean isLimitCommand() {
-        return limitCommand;
-    }
-
-    public List<String> getCommandWhitelist() {
-        return Collections.unmodifiableList(commandWhitelist);
-    } // 返回一个不可修改的列表，更安全
-
-    public boolean isLimitItemUse() {
-        return limitItemUse;
-    }
-
-    public boolean isLimitDamage() {
-        return limitDamage;
-    }
-
-    public boolean isLimitAttacking() {
-        return limitAttacking;
-    }
-
-    public boolean isRegisterReward() {
-        return registerGiveReward;
+    public int getRegisterPasswordMinLength() {
+        return registerConfig.getRegisterPasswordMinLength();
     }
 
     public boolean isRegisterConfirmPassword() {
-        return registerConfirmPassword;
+        return registerConfig.isRegisterConfirmPassword();
+    }
+
+    public boolean isRegisterAutoLogin() {
+        return registerConfig.isRegisterAutoLogin();
+    }
+
+    public boolean isRegisterReward() {
+        return registerConfig.isRegisterReward();
+    }
+
+    public ConfigurationSection getRegisterSend() {
+        return registerConfig.getRegisterSend();
+    }
+
+    // --- 登录配置 Getters ---
+    public ConfigurationSection getLoginSend() {
+        return loginConfig.getLoginSend();
+    }
+
+    // --- 玩家限制配置 Getters ---
+    public boolean isNotLoggedInLimitEnabled() {
+        return playerLimitConfig.isNotLoggedInLimitEnabled();
+    }
+
+    public boolean isLimitMove() {
+        return playerLimitConfig.isLimitMove();
+    }
+
+    public boolean isLimitBlockPlace() {
+        return playerLimitConfig.isLimitBlockPlace();
+    }
+
+    public boolean isLimitBlockBreak() {
+        return playerLimitConfig.isLimitBlockBreak();
+    }
+
+    public boolean isLimitBlockInteract() {
+        return playerLimitConfig.isLimitBlockInteract();
+    }
+
+    public boolean isLimitChat() {
+        return playerLimitConfig.isLimitChat();
+    }
+
+    public boolean isLimitCommand() {
+        return playerLimitConfig.isLimitCommand();
+    }
+
+    public List<String> getCommandWhitelist() {
+        return playerLimitConfig.getCommandWhitelist();
+    }
+
+    public boolean isLimitItemUse() {
+        return playerLimitConfig.isLimitItemUse();
+    }
+
+    public boolean isLimitDamage() {
+        return playerLimitConfig.isLimitDamage();
+    }
+
+    public boolean isLimitAttacking() {
+        return playerLimitConfig.isLimitAttacking();
+    }
+
+    // --- 配置模块直接访问方法（如需要） ---
+    /**
+     * 获取基础配置模块实例
+     */
+    public BaseConfig getBaseConfig() {
+        return baseConfig;
+    }
+
+    /**
+     * 获取数据库配置模块实例
+     */
+    public DatabaseConfig getDatabaseConfig() {
+        return databaseConfig;
+    }
+
+    /**
+     * 获取自动传送配置模块实例
+     */
+    public AutoTeleportConfig getAutoTeleportConfig() {
+        return autoTeleportConfig;
+    }
+
+    /**
+     * 获取注册配置模块实例
+     */
+    public RegisterConfig getRegisterConfig() {
+        return registerConfig;
+    }
+
+    /**
+     * 获取玩家限制配置模块实例
+     */
+    public PlayerLimitConfig getPlayerLimitConfig() {
+        return playerLimitConfig;
+    }
+
+    /**
+     * 获取登录配置模块实例
+     */
+    public LoginConfig getLoginConfig() {
+        return loginConfig;
     }
 }

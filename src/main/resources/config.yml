@@ -97,7 +97,28 @@ register:
   # The item to give to the player after registration.
   reward:
     enable: false
+  send:
+    massage: true
+    title: true
+    subtitle: true
+    sound: true
+    success: 
+      massage: true
+      title: true
+      subtitle: true
+      sound: true
 
+login:
+  send:
+    massage: true
+    title: true
+    subtitle: true
+    sound: true
+    success: 
+      massage: true
+      title: true
+      subtitle: true
+      sound: true
 
 
 # --------------[ 未登录玩家限制配置 | Pre-Login Restriction Settings ]--------------

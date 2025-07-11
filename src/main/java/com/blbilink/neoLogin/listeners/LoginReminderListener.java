@@ -43,7 +43,7 @@ public class LoginReminderListener implements Listener {
 
         player.setAllowFlight(true);
         player.setFlying(true);
-        
+
         // 如果玩家未登录，启动定时提醒任务
         if (!playerManager.isLoggedIn(player)) {
             startReminder(player);
@@ -62,10 +62,10 @@ public class LoginReminderListener implements Listener {
      */
     private void startReminder(Player player) {
         UUID playerId = player.getUniqueId();
-        
+
         // 如果已经有提醒任务在运行，先停止
         stopReminder(playerId);
-        
+
         // 创建新的定时任务，每3秒执行一次
         FoliaUtil.Cancellable task = foliaUtil.runTaskTimerAsync((cancellable) -> {
             // 检查玩家是否还在线
@@ -84,59 +84,89 @@ public class LoginReminderListener implements Listener {
             // 检查玩家是否已注册
             if (playerManager.isRegistered(onlinePlayer)) {
                 loginReminder(onlinePlayer);
-            }else{
+            } else {
                 registerReminder(onlinePlayer);
             }
-            
+
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
-            
+
         }, 0L, 60L); // 0tick延迟，每60tick（3秒）执行一次
-        
+
         reminderTasks.put(playerId, task);
     }
 
     /**
      * 启动登录提醒任务
+     * 
      * @param player
      * @return
      */
     private void loginReminder(Player player) {
         // 发送ActionBar消息提醒
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(i18n.as("login.noLoginMessage", true, player.getName())));
+        if (configManager.getLoginSend().getBoolean("massage")) {
+        player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+                    new TextComponent(i18n.as("login.noLoginMessage", true, player.getName())));
+        }
 
         // 发送Title消息提醒
-        player.sendTitle(i18n.as("login.noLoginTitle", false, player.getName()),null, 0, 100, 0);
+        if (configManager.getLoginSend().getBoolean("title")) {
+            player.sendTitle(i18n.as("login.noLoginTitle", false, player.getName()), null, 0, 100, 0);
+        }
 
         // 发送Subtitle消息提醒
-        player.sendTitle(null, i18n.as("login.noLoginActionbar", false, player.getName()), 0, 100, 0);
+        if (configManager.getLoginSend().getBoolean("subtitle")) {
+            player.sendTitle(null, i18n.as("login.noLoginActionbar", false, player.getName()), 0, 100, 0);
+        }
 
         // 发送Message消息提醒
-        player.sendMessage(i18n.as("login.noLoginMessage", true, player.getName()));
+        if (configManager.getLoginSend().getBoolean("massage")) {
+            player.sendMessage(i18n.as("login.noLoginMessage", true, player.getName()));
+        }
+
+        // 发送Sound消息提醒
+        if (configManager.getLoginSend().getBoolean("sound")) {
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
+        }
     }
 
     /**
      * 注册提醒任务
+     * 
      * @param player
      */
     private void registerReminder(Player player) {
         // 发送ActionBar消息提醒
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR, new TextComponent(i18n.as("register.noRegisterMessage", true, player.getName())));
+        if (configManager.getRegisterSend().getBoolean("massage")) {
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+                    new TextComponent(i18n.as("register.noRegisterMessage", true, player.getName())));
+        }
 
         // 发送Title消息提醒
-        player.sendTitle(i18n.as("register.noRegisterTitle", false, player.getName()),null, 0, 100, 0);
+        if (configManager.getRegisterSend().getBoolean("title")) {
+            player.sendTitle(i18n.as("register.noRegisterTitle", false, player.getName()), null, 0, 100, 0);
+        }
 
         // 发送Subtitle消息提醒
-        if(configManager.isRegisterConfirmPassword()){
-            player.sendTitle(null, i18n.as("register.noRegisterActionbar2", false, player.getName()), 0, 100, 0);
-        }else{
-            player.sendTitle(null, i18n.as("register.noRegisterActionbar", false, player.getName()), 0, 100, 0);
+        if (configManager.getRegisterSend().getBoolean("subtitle")) {
+            if (configManager.isRegisterConfirmPassword()) {
+                player.sendTitle(null, i18n.as("register.noRegisterActionbar2", false, player.getName()), 0, 100, 0);
+            } else {
+                player.sendTitle(null, i18n.as("register.noRegisterActionbar", false, player.getName()), 0, 100, 0);
+            }
         }
 
         // 发送Message消息提醒
-        if(configManager.isRegisterConfirmPassword()){
-            player.sendMessage(i18n.as("register.noRegisterMessage2", true, player.getName()));
-        }else{
-            player.sendMessage(i18n.as("register.noRegisterMessage", true, player.getName()));
+        if (configManager.getRegisterSend().getBoolean("massage")) {
+            if (configManager.isRegisterConfirmPassword()) {
+                player.sendMessage(i18n.as("register.noRegisterMessage2", true, player.getName()));
+            } else {
+                player.sendMessage(i18n.as("register.noRegisterMessage", true, player.getName()));
+            }
+        }
+
+        // 发送Sound消息提醒
+        if (configManager.getRegisterSend().getBoolean("sound")) {
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
         }
     }
 
@@ -157,4 +187,4 @@ public class LoginReminderListener implements Listener {
         stopReminder(player.getUniqueId());
     }
 
-} 
+}
