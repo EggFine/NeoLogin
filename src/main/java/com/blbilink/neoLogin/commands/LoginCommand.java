@@ -8,6 +8,7 @@ import com.blbilink.neoLogin.managers.PlayerManager;
 
 import org.bukkit.GameMode;
 import org.bukkit.Location;
+import org.bukkit.Sound;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -65,7 +66,22 @@ public class LoginCommand implements CommandExecutor {
             plugin.getFoliaUtil().runTask(() -> {
                 if (success) {
                     playerManager.setLoggedIn(player); // 标记为已登录
-                    player.sendMessage(i18n.as("login.success", true));
+
+                    // 发送消息
+                    if(configManager.getLoginSend().getBoolean("success.title")){
+                        player.sendTitle(i18n.as("login.success_title", false, player.getName()), null, 10, 100, 10);
+                    }
+                    if(configManager.getLoginSend().getBoolean("success.subtitle")){
+                        player.sendTitle(null, i18n.as("login.success_subtitle", false, player.getName()), 10, 100, 10);
+                    }
+                    if(configManager.getLoginSend().getBoolean("success.massage")){
+                        player.sendMessage(i18n.as("login.success_massage", true, player.getName()));
+                    }
+                    if(configManager.getLoginSend().getBoolean("success.sound")){
+                        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
+                    }
+
+                    // 检查是否需要禁用飞行
                     if(!player.getGameMode().equals(GameMode.CREATIVE) && !player.isOp()){
                         player.setFlying(false);
                         player.setAllowFlight(false);

@@ -149,7 +149,7 @@ public class LoginReminderListener implements Listener {
         // 发送Subtitle消息提醒
         if (configManager.getRegisterSend().getBoolean("subtitle")) {
             if (configManager.isRegisterConfirmPassword()) {
-                player.sendTitle(null, i18n.as("register.noRegisterActionbar2", false, player.getName()), 0, 100, 0);
+                player.sendTitle(null, i18n.as("register.noRegisterActionbar_confirm", false, player.getName()), 0, 100, 0);
             } else {
                 player.sendTitle(null, i18n.as("register.noRegisterActionbar", false, player.getName()), 0, 100, 0);
             }
@@ -158,7 +158,7 @@ public class LoginReminderListener implements Listener {
         // 发送Message消息提醒
         if (configManager.getRegisterSend().getBoolean("massage")) {
             if (configManager.isRegisterConfirmPassword()) {
-                player.sendMessage(i18n.as("register.noRegisterMessage2", true, player.getName()));
+                player.sendMessage(i18n.as("register.noRegisterMessage_confirm", true, player.getName()));
             } else {
                 player.sendMessage(i18n.as("register.noRegisterMessage", true, player.getName()));
             }
