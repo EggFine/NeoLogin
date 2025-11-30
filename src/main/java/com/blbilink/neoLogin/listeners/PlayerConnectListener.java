@@ -1,37 +1,21 @@
 package com.blbilink.neoLogin.listeners;
 
 import com.blbilink.neoLogin.NeoLogin;
-import com.blbilink.neoLogin.managers.ConfigManager;
 import com.blbilink.neoLogin.managers.PlayerManager;
-import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 
+/**
+ * 处理玩家连接和断开连接事件
+ * 注意：自动传送逻辑已移至 AutoTeleportListener，避免重复处理
+ */
 public class PlayerConnectListener implements Listener {
     private final PlayerManager playerManager;
-    private final ConfigManager configManager;
 
     public PlayerConnectListener(NeoLogin plugin) {
         this.playerManager = plugin.getPlayerManager();
-        this.configManager = plugin.getConfigManager();
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerJoin(PlayerJoinEvent event) {
-        Player player = event.getPlayer();
-
-        // 检查是否需要自动传送到登录点
-        if (configManager.isAutoTeleportEnabled() && configManager.isAutoTeleportOnJoin()) {
-            Location loginLocation = configManager.getTeleportLocation();
-            if (loginLocation != null) {
-                // 缓存玩家的原始位置，以便登录后返回
-                playerManager.cacheOriginalLocation(player.getUniqueId(), player.getLocation());
-                player.teleport(loginLocation);
-            }
-        }
     }
 
     @EventHandler
@@ -41,6 +25,4 @@ public class PlayerConnectListener implements Listener {
         playerManager.setLoggedOut(player);
         playerManager.getAndRemoveOriginalLocation(player.getUniqueId());
     }
-
-
 }

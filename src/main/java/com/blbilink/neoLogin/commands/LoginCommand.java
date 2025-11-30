@@ -6,7 +6,6 @@ import com.blbilink.neoLogin.dao.UserDAO;
 import com.blbilink.neoLogin.managers.ConfigManager;
 import com.blbilink.neoLogin.managers.PlayerManager;
 
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Sound;
 import org.bukkit.command.Command;
@@ -74,18 +73,15 @@ public class LoginCommand implements CommandExecutor {
                     if(configManager.getLoginSend().getBoolean("success.subtitle")){
                         player.sendTitle(null, i18n.as("login.success_subtitle", false, player.getName()), 10, 100, 10);
                     }
-                    if(configManager.getLoginSend().getBoolean("success.massage")){
-                        player.sendMessage(i18n.as("login.success_massage", true, player.getName()));
+                    if(configManager.getLoginSend().getBoolean("success.message")){
+                        player.sendMessage(i18n.as("login.success_message", true, player.getName()));
                     }
                     if(configManager.getLoginSend().getBoolean("success.sound")){
                         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.0f);
                     }
 
-                    // 检查是否需要禁用飞行
-                    if(!player.getGameMode().equals(GameMode.CREATIVE) && !player.isOp()){
-                        player.setFlying(false);
-                        player.setAllowFlight(false);
-                    }
+                    // 恢复玩家登录前的飞行状态
+                    playerManager.restoreFlightState(player);
 
                     // 检查是否需要传送回原位
                     if (configManager.isAutoTeleportBack()) {

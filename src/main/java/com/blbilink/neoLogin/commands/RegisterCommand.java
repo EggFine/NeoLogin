@@ -6,7 +6,6 @@ import com.blbilink.neoLogin.dao.UserDAO;
 import com.blbilink.neoLogin.managers.ConfigManager;
 import com.blbilink.neoLogin.managers.PlayerManager;
 
-import org.bukkit.GameMode;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -60,8 +59,17 @@ public class RegisterCommand implements CommandExecutor {
 
         String password = args[0];
 
-        if (password.length() < 6) {
+        // 使用配置的最小密码长度进行验证
+        int minLength = configManager.getRegisterPasswordMinLength();
+        int maxLength = configManager.getRegisterPasswordLength();
+
+        if (password.length() < minLength) {
             player.sendMessage(i18n.as("register.passwordTooShort", true));
+            return;
+        }
+
+        if (password.length() > maxLength) {
+            player.sendMessage(i18n.as("register.passwordTooLong", true));
             return;
         }
 
@@ -82,8 +90,17 @@ public class RegisterCommand implements CommandExecutor {
             return;
         }
 
-        if (password.length() < 6) {
+        // 使用配置的最小密码长度进行验证
+        int minLength = configManager.getRegisterPasswordMinLength();
+        int maxLength = configManager.getRegisterPasswordLength();
+
+        if (password.length() < minLength) {
             player.sendMessage(i18n.as("register.passwordTooShort", true));
+            return;
+        }
+
+        if (password.length() > maxLength) {
+            player.sendMessage(i18n.as("register.passwordTooLong", true));
             return;
         }
 
@@ -100,10 +117,8 @@ public class RegisterCommand implements CommandExecutor {
                 if (success) {
                     playerManager.setLoggedIn(player);
                     player.sendMessage(i18n.as("register.success", true));
-                    if (!player.getGameMode().equals(GameMode.CREATIVE) && !player.isOp()) {
-                        player.setFlying(false);
-                        player.setAllowFlight(false);
-                    }
+                    // 恢复玩家登录前的飞行状态
+                    playerManager.restoreFlightState(player);
                     if (configManager.isRegisterReward()) {
                         playerManager.giveRegisterReward(player);
                     }

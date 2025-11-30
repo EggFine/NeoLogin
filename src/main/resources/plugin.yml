@@ -12,21 +12,35 @@ START-AFTER:
   - NeoLibrary
 
 
+softdepend:
+  - floodgate
+
 commands:
   login:
-    description: "login command"
-    usage: "/login"
+    description: "Login to the server"
+    usage: "/login <password>"
     aliases:
       - "l"
   register:
-    description: "register command"
-    usage: "/register"
+    description: "Register a new account"
+    usage: "/register <password> [confirm password]"
     aliases:
       - "reg"
   neologin:
-    description: "neologin command"
-    usage: "/neologin"
+    description: "NeoLogin main command"
+    usage: "/neologin <reload|savelocation>"
     aliases:
       - "nl"
-    permissions:
-      - "neologin.admin"
+    permission: "neologin.admin"
+  resetpassword:
+    description: "Reset your password"
+    usage: "/resetpassword <old password> <new password>"
+    aliases:
+      - "resetpass"
+      - "resetpw"
+      - "resetpwd"
+
+permissions:
+  neologin.admin:
+    description: "Allows access to admin commands"
+    default: op

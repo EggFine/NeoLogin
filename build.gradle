@@ -5,7 +5,7 @@ plugins {
 }
 
 group = 'com.blbilink'
-def baseVersion = "1.21.1"
+def baseVersion = "1.21.8"
 // 从环境变量读取 CI 提供的构建号
 def buildNumber = System.getenv("GITHUB_RUN_NUMBER") ?: "SNAPSHOT"
 version = "${baseVersion}.${buildNumber}"
@@ -24,13 +24,21 @@ repositories {
         name = "sonatype-oss-snapshots1"
         url = "https://repo.papermc.io/repository/maven-public/"
     }
+    // GeyserMC/Floodgate 仓库
+    maven {
+        name = "opencollab-snapshot"
+        url = "https://repo.opencollab.dev/main/"
+    }
 }
 
 dependencies {
-    compileOnly("org.spigotmc:spigot-api:1.21.1-R0.1-SNAPSHOT")
-    compileOnly "dev.folia:folia-api:1.20.1-R0.1-SNAPSHOT"
+    compileOnly "dev.folia:folia-api:1.21.8-R0.1-SNAPSHOT"
     implementation 'at.favre.lib:bcrypt:0.10.2'
     implementation fileTree(dir: 'libs', include: '*.jar')
+    // Floodgate API (基岩版支持)
+    compileOnly 'org.geysermc.floodgate:api:2.2.4-SNAPSHOT'
+    // Cumulus (Floodgate 表单 API)
+    compileOnly 'org.geysermc.cumulus:cumulus:1.1.2'
 }
 
 tasks {

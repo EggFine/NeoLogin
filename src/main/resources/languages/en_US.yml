@@ -1,22 +1,83 @@
-version: 1.0.0
+version: 1.1.0
 Language: "English (United States)"
 loadedLanguage: "Loaded language file: %s"
 
 # Login command related messages
 login:
+  noLoginMessage: "You are §cnot logged in§f, actions may be restricted. Use /login <password> to log in!"
+  noLoginTitle: "§lWelcome back to §fNeo§bWorld§f!"
+  noLoginSubtitle: "Please use §6/login <password>§f to log in"
+  noLoginActionbar: "You are §cnot logged in§f, actions may be restricted. Use /login <password> to log in"
   onlyPlayer: "&cThis command can only be executed by players."
   alreadyLoggedIn: "&aYou are already logged in, no need to repeat this action."
-  notRegistered: "&cYou are not registered yet, please use /register <password> <repeat password> to register."
+  notRegistered: "&cYou are not registered yet, please use /register <password> to register."
   usage: "&eUsage: /login <password>"
-  success: "&aLogin successful, welcome back!"
+  success_title: "&aLogin Successful!"
+  success_subtitle: "Welcome back, [%s] Enjoy your game!"
+  success_message: "&f&lLogin successful, [%s] Welcome to NeoWorld!"
   teleportBack: "&aYou have been teleported back to your previous location."
   wrongPassword: "&cIncorrect password, please try again!"
 
 # Register command related messages
 register:
+  noRegisterMessage: "You are §cnot registered§f, actions may be restricted. Use /register <password> to register!"
+  noRegisterMessage_confirm: "You are §cnot registered§f, actions may be restricted. Use /register <password> <confirm password> to register!"
+  noRegisterTitle: "§lWelcome to §fNeo§bWorld§f!"
+  noRegisterSubtitle: "Please use §6/register <password>§f to register"
+  noRegisterActionbar: "You are §cnot registered§f, actions may be restricted. Use /register <password> to register"
+  noRegisterActionbar_confirm: "You are §cnot registered§f, actions may be restricted. Use /register <password> <confirm password> to register"
   alreadyRegistered: "&cYou are already registered, please use /login <password> to log in."
-  usage: "&eUsage: /register <password> <repeat password>"
+  usage: "&eUsage: /register <password> <confirm password>"
   passwordMismatch: "&cThe two passwords entered do not match!"
-  passwordTooShort: "&cFor your account security, password length cannot be less than 6 characters."
-  success: "&aCongratulations, registration successful and you are automatically logged in!"
+  passwordTooShort: "&cFor your account security, password length cannot be less than the configured minimum."
+  passwordTooLong: "&cPassword length exceeds the limit, please use a shorter password."
+  success: "&aRegistration successful! Welcome to NeoWorld!"
+  success_title: "&aRegistration Successful!"
+  success_title_autologin: "&aRegistration successful, auto logged in!"
+  success_subtitle: "Welcome to NeoWorld, [%s] Enjoy your game!"
+  success_subtitle_autologin: "Welcome to NeoWorld, [%s] You have been auto logged in, enjoy your game!"
   error: "&cAn unknown error occurred during registration, please contact the administrator."
+  reward: "&aYou have received a registration reward!"
+
+# Reset password command related messages
+resetpassword:
+  notLoggedIn: "&cYou need to log in first to reset your password!"
+  usage:
+    player: "&eUsage: /resetpassword <old password> <new password>"
+    console: "&eUsage: /resetpassword <player name> <new password>"
+  wrongOldPassword: "&cIncorrect old password, please check and try again!"
+  failed: "&cPassword reset failed, please contact the administrator."
+  kickMessage: "&aYour password has been reset, please log in again with your new password."
+  playerNotOnline: "&cTarget player is not online!"
+  playerNotFound: "&cPlayer not found!"
+  playerNotRegistered: "&cThis player is not registered, cannot reset password!"
+  adminSuccess: "&aPlayer %s's password has been reset to: %s"
+
+# Main command related messages
+command:
+  noPermission: "&cYou do not have permission to execute this command!"
+  reloaded: "&aConfiguration file reloaded successfully!"
+  reloadFailed: "&cConfiguration file reload failed!"
+  onlyPlayer: "&cThis command can only be executed by players!"
+  locationSaved: "&aTeleport location saved successfully!"
+  locationInfo: "&7World: %s, X: %s, Y: %s, Z: %s"
+  saveLocationFailed: "&cFailed to save location!"
+  help:
+    header: "&6===== NeoLogin Help ====="
+    reload: "&e/neologin reload &7- Reload configuration file"
+    savelocation: "&e/neologin savelocation &7- Save current location as teleport point"
+
+# Bedrock related messages
+bedrock:
+  autoLoginSuccess: "&aBedrock player %s has been auto logged in!"
+  form:
+    loginTitle: "Login"
+    registerTitle: "Register"
+    loginDescription: "Please enter your password to log in."
+    registerDescription: "Please enter your password to register."
+    passwordField: "Password"
+    confirmPasswordField: "Confirm Password"
+    passwordPlaceholder: "Enter password..."
+    mustComplete: "&cYou must complete the form to continue playing!"
+    passwordEmpty: "&cPassword cannot be empty!"
+    error: "&cAn error occurred while processing the form, please try again."

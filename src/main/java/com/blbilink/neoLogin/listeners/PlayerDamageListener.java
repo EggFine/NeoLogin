@@ -22,7 +22,10 @@ public class PlayerDamageListener implements Listener {
     public void onPlayerDamage(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
-            if (configManager.isLimitDamage() && !playerManager.isLoggedIn(player)) {
+            // 修复: 添加总开关检查
+            if (configManager.isNotLoggedInLimitEnabled() 
+                    && configManager.isLimitDamage() 
+                    && !playerManager.isLoggedIn(player)) {
                 event.setCancelled(true);
             }
         }

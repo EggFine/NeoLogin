@@ -15,9 +15,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 
 public class LoginReminderListener implements Listener {
 
@@ -26,8 +26,8 @@ public class LoginReminderListener implements Listener {
     private final I18n i18n;
     private final FoliaUtil foliaUtil;
     private final ConfigManager configManager;
-    // 存储每个玩家的提醒任务
-    private final Map<UUID, FoliaUtil.Cancellable> reminderTasks = new HashMap<>();
+    // 存储每个玩家的提醒任务（使用 ConcurrentHashMap 以支持并发访问）
+    private final Map<UUID, FoliaUtil.Cancellable> reminderTasks = new ConcurrentHashMap<>();
 
     public LoginReminderListener(NeoLogin plugin) {
         this.plugin = plugin;
@@ -41,11 +41,15 @@ public class LoginReminderListener implements Listener {
     public void onPlayerJoin(PlayerJoinEvent event) {
         Player player = event.getPlayer();
 
-        player.setAllowFlight(true);
-        player.setFlying(true);
-
-        // 如果玩家未登录，启动定时提醒任务
+        // 如果玩家未登录，保存飞行状态并设置为飞行，启动定时提醒任务
         if (!playerManager.isLoggedIn(player)) {
+            // 先保存玩家当前的飞行状态，以便登录成功后恢复
+            playerManager.cacheAllowFlight(player.getUniqueId(), player.getAllowFlight());
+            
+            // 设置玩家为飞行状态，防止未登录时移动
+            player.setAllowFlight(true);
+            player.setFlying(true);
+            
             startReminder(player);
         }
     }
@@ -81,14 +85,14 @@ public class LoginReminderListener implements Listener {
                 return;
             }
 
-            // 检查玩家是否已注册
-            if (playerManager.isRegistered(onlinePlayer)) {
+            // 每次检查时动态获取注册状态，确保状态实时准确
+            // 虽然会有数据库查询，但登录提醒间隔为3秒，影响可以接受
+            boolean isRegistered = playerManager.isRegistered(onlinePlayer);
+            if (isRegistered) {
                 loginReminder(onlinePlayer);
             } else {
                 registerReminder(onlinePlayer);
             }
-
-            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_PLING, 1.0f, 1.0f);
 
         }, 0L, 60L); // 0tick延迟，每60tick（3秒）执行一次
 
@@ -103,8 +107,8 @@ public class LoginReminderListener implements Listener {
      */
     private void loginReminder(Player player) {
         // 发送ActionBar消息提醒
-        if (configManager.getLoginSend().getBoolean("massage")) {
-        player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
+        if (configManager.getLoginSend().getBoolean("message")) {
+            player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
                     new TextComponent(i18n.as("login.noLoginMessage", true, player.getName())));
         }
 
@@ -119,7 +123,7 @@ public class LoginReminderListener implements Listener {
         }
 
         // 发送Message消息提醒
-        if (configManager.getLoginSend().getBoolean("massage")) {
+        if (configManager.getLoginSend().getBoolean("message")) {
             player.sendMessage(i18n.as("login.noLoginMessage", true, player.getName()));
         }
 
@@ -136,7 +140,7 @@ public class LoginReminderListener implements Listener {
      */
     private void registerReminder(Player player) {
         // 发送ActionBar消息提醒
-        if (configManager.getRegisterSend().getBoolean("massage")) {
+        if (configManager.getRegisterSend().getBoolean("message")) {
             player.spigot().sendMessage(ChatMessageType.ACTION_BAR,
                     new TextComponent(i18n.as("register.noRegisterMessage", true, player.getName())));
         }
@@ -156,7 +160,7 @@ public class LoginReminderListener implements Listener {
         }
 
         // 发送Message消息提醒
-        if (configManager.getRegisterSend().getBoolean("massage")) {
+        if (configManager.getRegisterSend().getBoolean("message")) {
             if (configManager.isRegisterConfirmPassword()) {
                 player.sendMessage(i18n.as("register.noRegisterMessage_confirm", true, player.getName()));
             } else {

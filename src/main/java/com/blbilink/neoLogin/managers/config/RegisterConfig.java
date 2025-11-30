@@ -3,6 +3,9 @@ package com.blbilink.neoLogin.managers.config;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * 注册配置类，管理玩家注册相关配置项
  */
@@ -15,6 +18,12 @@ public class RegisterConfig {
     private boolean registerAutoLogin;
     private boolean registerGiveReward;
     private ConfigurationSection registerSend;
+    
+    // 奖励配置
+    private List<String> rewardItems;
+    private int rewardExperience;
+    private List<String> rewardPlayerCommands;
+    private List<String> rewardConsoleCommands;
 
     /**
      * 从配置文件加载注册配置
@@ -29,6 +38,21 @@ public class RegisterConfig {
         registerAutoLogin = config.getBoolean("register.autoLogin", true);
         registerGiveReward = config.getBoolean("register.reward.enable", false);
         registerSend = config.getConfigurationSection("register.send");
+        
+        // 加载奖励配置
+        rewardItems = config.getStringList("register.reward.items");
+        if (rewardItems == null) {
+            rewardItems = new ArrayList<>();
+        }
+        rewardExperience = config.getInt("register.reward.experience", 0);
+        rewardPlayerCommands = config.getStringList("register.reward.playerCommands");
+        if (rewardPlayerCommands == null) {
+            rewardPlayerCommands = new ArrayList<>();
+        }
+        rewardConsoleCommands = config.getStringList("register.reward.consoleCommands");
+        if (rewardConsoleCommands == null) {
+            rewardConsoleCommands = new ArrayList<>();
+        }
     }
 
     // Getters
@@ -58,5 +82,21 @@ public class RegisterConfig {
 
     public ConfigurationSection getRegisterSend() {
         return registerSend;
+    }
+    
+    public List<String> getRewardItems() {
+        return rewardItems;
+    }
+    
+    public int getRewardExperience() {
+        return rewardExperience;
+    }
+    
+    public List<String> getRewardPlayerCommands() {
+        return rewardPlayerCommands;
+    }
+    
+    public List<String> getRewardConsoleCommands() {
+        return rewardConsoleCommands;
     }
 } 

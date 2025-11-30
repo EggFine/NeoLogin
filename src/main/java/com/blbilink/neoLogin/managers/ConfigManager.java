@@ -16,7 +16,7 @@ import java.util.List;
 public class ConfigManager {
 
     private final JavaPlugin plugin;
-    private final FileConfiguration config;
+    private FileConfiguration config;
 
     // 配置模块
     private final BaseConfig baseConfig;
@@ -25,6 +25,9 @@ public class ConfigManager {
     private final RegisterConfig registerConfig;
     private final PlayerLimitConfig playerLimitConfig;
     private final LoginConfig loginConfig;
+    private final BedrockConfig bedrockConfig;
+    private final ParticleConfig particleConfig;
+
     /**
      * 构造函数，初始化时会自动加载和解析配置文件。
      * 
@@ -43,6 +46,9 @@ public class ConfigManager {
         this.registerConfig = new RegisterConfig();
         this.playerLimitConfig = new PlayerLimitConfig();
         this.loginConfig = new LoginConfig();
+        this.bedrockConfig = new BedrockConfig();
+        this.particleConfig = new ParticleConfig();
+
         // 加载并缓存所有配置值
         loadAndCacheValues();
     }
@@ -51,12 +57,18 @@ public class ConfigManager {
      * 从 FileConfiguration 对象中读取所有配置项并缓存到各配置模块中。
      */
     public void loadAndCacheValues() {
+        // 重新加载配置文件
+        ConfigUtil configUtil = new ConfigUtil(plugin, "config.yml");
+        this.config = configUtil.getConfig();
+        
         baseConfig.load(config);
         databaseConfig.load(config);
         autoTeleportConfig.load(config);
         registerConfig.load(config);
         playerLimitConfig.load(config);
         loginConfig.load(config);
+        bedrockConfig.load(config);
+        particleConfig.load(config);
     }
 
     // --- 基础配置 Getters ---
@@ -223,5 +235,53 @@ public class ConfigManager {
      */
     public LoginConfig getLoginConfig() {
         return loginConfig;
+    }
+
+    /**
+     * 获取基岩版配置模块实例
+     */
+    public BedrockConfig getBedrockConfig() {
+        return bedrockConfig;
+    }
+
+    /**
+     * 获取粒子效果配置模块实例
+     */
+    public ParticleConfig getParticleConfig() {
+        return particleConfig;
+    }
+
+    // --- 基岩版配置 Getters ---
+    public boolean isBedrockEnabled() {
+        return bedrockConfig.isEnabled();
+    }
+
+    public boolean isBedrockAutoLoginByFloodgate() {
+        return bedrockConfig.isAutoLoginByFloodgate();
+    }
+
+    public boolean isBedrockAutoLoginByUUID() {
+        return bedrockConfig.isAutoLoginByUUID();
+    }
+
+    public boolean isBedrockAutoLoginByPrefix() {
+        return bedrockConfig.isAutoLoginByPrefix();
+    }
+
+    public String getBedrockPrefix() {
+        return bedrockConfig.getPrefix();
+    }
+
+    public boolean isBedrockFormsEnabled() {
+        return bedrockConfig.isFormsEnabled();
+    }
+
+    // --- 粒子效果配置 Getters ---
+    public boolean isParticleEnabled() {
+        return particleConfig.isEnabled();
+    }
+
+    public String getParticleType() {
+        return particleConfig.getParticleType();
     }
 }

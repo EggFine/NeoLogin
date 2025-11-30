@@ -1,4 +1,4 @@
-version: 1.0.0
+version: 1.1.0
 Language: "简体中文 (Simplified Chinese)"
 loadedLanguage: "已加载语言文件: %s"
 
@@ -10,10 +10,11 @@ login:
   noLoginActionbar: "您当前§c未登录§f, 操作可能受限, 使用 /login <密码> 进行登录"
   onlyPlayer: "&c该指令只能由玩家执行。"
   alreadyLoggedIn: "&a您已经登录了，无需重复操作。"
+  notRegistered: "&c您还没有注册，请先使用 /register <密码> 进行注册。"
   usage: "&e用法: /login <密码>"
   success_title: "&a登录成功！"
   success_subtitle: "欢迎回来，[%s] 游玩愉快！"
-  success_massage: "&f&l登录成功，[%s] 欢迎来到 NeoWorld！"
+  success_message: "&f&l登录成功，[%s] 欢迎来到 NeoWorld！"
   teleportBack: "&a已将您传送回之前的位置。"
   wrongPassword: "&c密码错误，请重试！"
 
@@ -28,10 +29,56 @@ register:
   alreadyRegistered: "&c您已经注册过了，请使用 /login <密码> 来登录。"
   usage: "&e用法: /register <密码> <重复密码>"
   passwordMismatch: "&c两次输入的密码不一致！"
-  passwordTooShort: "&c为了您的账户安全，密码长度不能少于6位。"
+  passwordTooShort: "&c为了您的账户安全，密码长度不能少于配置的最小值。"
+  passwordTooLong: "&c密码长度超过限制，请使用较短的密码。"
+  success: "&a注册成功！欢迎来到 NeoWorld！"
   success_title: "&a注册成功！"
   success_title_autologin: "&a注册成功，已自动登录！"
   success_subtitle: "欢迎来到NeoWorld，[%s] 游玩愉快！"
   success_subtitle_autologin: "欢迎来到NeoWorld，[%s] 已经为您自动登录，游玩愉快！"
   error: "&c注册时发生未知错误，请联系管理员。"
+  reward: "&a您获得了注册奖励！"
+
+# 重置密码命令相关消息
+resetpassword:
+  notLoggedIn: "&c您需要先登录才能重置密码！"
+  usage:
+    player: "&e用法: /resetpassword <旧密码> <新密码>"
+    console: "&e用法: /resetpassword <玩家名> <新密码>"
+  wrongOldPassword: "&c旧密码错误，请检查后重试！"
+  failed: "&c密码重置失败，请联系管理员。"
+  kickMessage: "&a您的密码已被重置，请使用新密码重新登录。"
+  playerNotOnline: "&c目标玩家不在线！"
+  playerNotFound: "&c找不到该玩家！"
+  playerNotRegistered: "&c该玩家尚未注册，无法重置密码！"
+  adminSuccess: "&a玩家 %s 的密码已被重置为: %s"
+
+# 主命令相关消息
+command:
+  noPermission: "&c您没有权限执行此命令！"
+  reloaded: "&a配置文件重载成功！"
+  reloadFailed: "&c配置文件重载失败！"
+  onlyPlayer: "&c该命令只能由玩家执行！"
+  locationSaved: "&a传送点位置已保存成功！"
+  locationInfo: "&7世界: %s, X: %s, Y: %s, Z: %s"
+  saveLocationFailed: "&c保存位置失败！"
+  help:
+    header: "&6===== NeoLogin 帮助 ====="
+    reload: "&e/neologin reload &7- 重载配置文件"
+    savelocation: "&e/neologin savelocation &7- 保存当前位置为传送点"
+
+# 基岩版相关消息
+bedrock:
+  autoLoginSuccess: "&a基岩版玩家 %s 已自动登录！"
+  form:
+    loginTitle: "登录"
+    registerTitle: "注册"
+    loginDescription: "请输入您的密码进行登录。"
+    registerDescription: "请输入您的密码进行注册。"
+    passwordField: "密码"
+    confirmPasswordField: "确认密码"
+    passwordPlaceholder: "请输入密码..."
+    mustComplete: "&c您必须完成表单才能继续游戏！"
+    passwordEmpty: "&c密码不能为空！"
+    error: "&c处理表单时发生错误，请重试。"
 

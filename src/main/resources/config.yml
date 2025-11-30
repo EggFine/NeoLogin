@@ -30,13 +30,14 @@ database:
 
   # Sqlite 设置 (如果 type 是 "sqlite")
   # Sqlite settings (used only if type is "sqlite").
-  filePath: "plugins/NeoLogin/playerData.db"
+  # 注意：此路径相对于插件数据目录，或使用绝对路径
+  file: "playerData.db"
 
   # 远程数据库设置 (用于 mysql, mariadb, postgresql)
   # Remote database settings (for mysql, mariadb, postgresql).
   host: "localhost"
   port: 3306
-  databaseName: "neoLogin"
+  database: "neoLogin"
   username: "root"
   password: "123456"
 
@@ -93,29 +94,57 @@ register:
   # 注册成功后是否自动登录
   # Automatically login after registration.
   autoLogin: true
-  # 注册成功后给予的物品
-  # The item to give to the player after registration.
+  # 注册成功后给予的奖励
+  # Rewards to give to the player after registration.
   reward:
+    # 是否启用注册奖励
+    # Enable registration rewards?
     enable: false
+    
+    # 物品奖励列表
+    # List of item rewards.
+    # 格式: "物品ID:数量" 或 "物品ID:数量:数据值"
+    # Format: "ITEM_ID:amount" or "ITEM_ID:amount:data"
+    items:
+      - "BREAD:16"
+      - "IRON_SWORD:1"
+      - "LEATHER_BOOTS:1"
+    
+    # 经验值奖励
+    # Experience points reward.
+    experience: 100
+    
+    # 执行的命令列表（以玩家身份执行）
+    # Commands to execute (as player).
+    # 使用 %player% 代表玩家名
+    # Use %player% for player name.
+    playerCommands: []
+    
+    # 执行的命令列表（以控制台身份执行）
+    # Commands to execute (as console).
+    # 使用 %player% 代表玩家名
+    # Use %player% for player name.
+    consoleCommands:
+      - "give %player% minecraft:cookie 5"
   send:
-    massage: true
+    message: true
     title: true
     subtitle: true
     sound: true
     success: 
-      massage: true
+      message: true
       title: true
       subtitle: true
       sound: true
 
 login:
   send:
-    massage: true
+    message: true
     title: true
     subtitle: true
     sound: true
     success: 
-      massage: true
+      message: true
       title: true
       subtitle: true
       sound: true
@@ -155,7 +184,9 @@ notLoggedInPlayerLimit:
     # Whitelisted commands that can be used even when 'command' is set to true.
     commandWhitelist:
       - "/login"
+      - "/l"
       - "/register"
+      - "/reg"
     # 禁止玩家使用物品
     # Prevent players from using items.
     itemUse: true
@@ -165,3 +196,47 @@ notLoggedInPlayerLimit:
     # 禁止玩家攻击
     # Prevent players from attacking.
     attack: true
+
+# --------------[ 基岩版配置 | Bedrock Settings ]--------------
+# 基岩版玩家相关设置
+# Settings for Bedrock Edition players.
+bedrock:
+
+  # 总开关
+  # Master switch to enable or disable Bedrock support.
+  enabled: false
+
+  # 自动登录设置
+  # Auto-login settings for Bedrock players.
+  autologin:
+    # 是否启用 Floodgate 自动登录
+    # Enable auto-login with Floodgate?
+    floodgate: false
+    # 是否启用 UUID 自动登录（基岩版 UUID 以 00000000-0000-0000- 开头）
+    # Enable auto-login by UUID? (Bedrock UUIDs start with 00000000-0000-0000-)
+    uuid: false
+    # 是否启用前缀自动登录
+    # Enable auto-login by prefix?
+    prefix: false
+    # 基岩版玩家名称前缀
+    # Prefix for Bedrock player names.
+    prefix_value: "*"
+
+  # 是否为基岩版玩家启用表单登录/注册
+  # Enable forms for Bedrock players login/register?
+  forms: true
+
+# --------------[ 粒子效果配置 | Particle Settings ]--------------
+# 未登录玩家的粒子效果设置
+# Particle effects for players who have not logged in.
+particle:
+
+  # 总开关
+  # Master switch to enable or disable particle effects.
+  enabled: false
+
+  # 粒子类型
+  # Particle type.
+  # 可用类型：FLAME, VILLAGER_HAPPY, HEART, CRIT, ENCHANTMENT_TABLE 等
+  # Available types: FLAME, VILLAGER_HAPPY, HEART, CRIT, ENCHANTMENT_TABLE, etc.
+  type: "FLAME"

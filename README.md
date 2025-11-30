@@ -1,230 +1,292 @@
-# NeoLogin
-
 <div align="center">
-
-**语言 | Language**
-
-[简体中文](README.md) | [English](README_en_US.md)
-
+  <img src="images/logo.png" alt="NeoLogin Logo" width="200"/>
+  
+  # NeoLogin
+  
+  **The Next Generation Minecraft Authentication Plugin**
+  
+  [![SpigotMC](https://img.shields.io/badge/SpigotMC-NeoLogin-orange?style=flat-square)](https://www.spigotmc.org/resources/125813/)
+  [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](LICENSE)
+  [![Java](https://img.shields.io/badge/Java-21+-brightgreen?style=flat-square)](https://adoptium.net/)
+  [![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1+-green?style=flat-square)](https://minecraft.net/)
+  
+  [简体中文](README_CS.md) | **English**
+  
 </div>
 
-## NeoLogin 是下一代 blbiLogin
+---
 
-**NeoLogin** 是基于 Minecraft 1.21.1 Spigot/Paper 核心开发的现代化玩家登录插件解决方案，继承并改进了 [blbiLogin](https://github.com/EggFine/blbiLogin) 的核心功能。
+## 📖 About
 
-> ⚠️ **警告**：最新的 Release 仍处于不可用阶段，仅可进行开发测试，**不可用于生产环境**，您可以前往下载 [blbiLogin](https://github.com/EggFine/blbiLogin) 体验完善的，稳定的登录插件
+**NeoLogin** is a modern, feature-rich player authentication plugin for Minecraft servers. It is the complete rewrite and next-generation evolution of [blbiLogin](https://github.com/EggFine/blbiLogin), designed from the ground up with modern architecture, better performance, and more features.
 
+> ⚠️ **Note**: NeoLogin is under active development. For production servers, consider using [blbiLogin](https://github.com/EggFine/blbiLogin) until NeoLogin reaches stable release.
 
 ---
 
-## ✨ 特性
+## ✨ Features
 
-### 🔒 安全登录系统
-- **密码保护**：玩家必须注册并登录才能游戏
-- **密码加密**：使用 BCrypt 算法保护玩家密码
-- **会话管理**：自动管理玩家登录状态
+### 🔒 Secure Authentication System
+- **BCrypt Password Hashing** - Industry-standard password encryption
+- **Session Management** - Automatic login state tracking
+- **IP Logging** - Track login attempts and locations
+- **Password Validation** - Configurable min/max password length
 
-### 🌐 多平台支持
-- **Java 版**：完全支持 Java 版 Minecraft 客户端
-- **基岩版**：支持基岩版玩家（通过 Floodgate）
-- **跨版本**：兼容 Minecraft 1.21.1+
+### 🗄️ Multi-Database Support
+| Database | Description | Recommended For |
+|----------|-------------|-----------------|
+| **SQLite** | Lightweight local storage | Small servers (default) |
+| **MySQL** | High-performance remote DB | Medium to large servers |
+| **MariaDB** | MySQL-compatible | Enterprise environments |
+| **PostgreSQL** | Advanced enterprise DB | Large-scale deployments |
 
-### 🗄️ 多数据库支持
-- **SQLite**：轻量级本地数据库（默认）
-- **MySQL**：高性能远程数据库
-- **MariaDB**：MySQL 兼容数据库
-- **PostgreSQL**：企业级数据库
+### 🎮 Bedrock Edition Support
+- **Floodgate Integration** - Native support for Geyser/Floodgate
+- **Auto-Login Options** - UUID-based, prefix-based, or Floodgate API
+- **Form UI** - Beautiful native forms for Bedrock players
+- **Seamless Experience** - Bedrock players get the same features as Java
 
-### 🌍 国际化支持
-- **中文简体**（zh_CN）
-- **英语**（en_US）
-- 支持自定义语言文件
+### 🎁 Registration Reward System
+- **Item Rewards** - Give items on first registration
+- **Experience Rewards** - Grant XP to new players
+- **Command Execution** - Run custom commands (player or console)
+- **Fully Configurable** - Enable/disable individual reward types
 
-### ⚡ 高性能架构
-- **Folia 支持**：原生支持 Folia 服务器
-- **Java 21**：基于最新 Java 21 构建
-- **异步处理**：数据库操作异步执行，不阻塞主线程
+### 🚀 Advanced Features
+- **Auto-Teleport System** - Teleport players to spawn on join/death
+- **Return Location** - Teleport back to original location after login
+- **Particle Effects** - Visual indicators for unregistered players
+- **Flight State Preservation** - Restore flight permissions after login
+- **Folia Support** - Native compatibility with Folia servers
+
+### 🛡️ Pre-Login Restrictions
+Comprehensive protection for unregistered/unlogged players:
+
+| Restriction | Description |
+|-------------|-------------|
+| `move` | Prevent player movement |
+| `blockPlace` | Prevent block placement |
+| `blockBreak` | Prevent block breaking |
+| `blockInteract` | Prevent block interaction |
+| `chat` | Prevent chat messages |
+| `command` | Prevent command usage (with whitelist) |
+| `itemUse` | Prevent item usage |
+| `damage` | Prevent taking damage |
+| `attack` | Prevent attacking entities |
+
+### 🌍 Internationalization
+- **Built-in Languages**: English (en_US), Simplified Chinese (zh_CN)
+- **Custom Languages**: Add your own language files
+- **Per-Message Customization**: Customize every message
 
 ---
 
-## 📋 系统要求
+## 📊 NeoLogin vs blbiLogin Comparison
 
-| 项目               | 要求                   |
-| ------------------ | ---------------------- |
-| **Minecraft 版本** | 1.21.1+                |
-| **服务器核心**     | Spigot / Paper / Folia |
-| **Java 版本**      | Java 21+               |
-| **依赖插件**       | NeoLibrary             |
+| Feature | NeoLogin | blbiLogin |
+|---------|:--------:|:---------:|
+| **Database Support** | SQLite, MySQL, MariaDB, PostgreSQL | SQLite only |
+| **Registration Rewards** | ✅ Items, XP, Commands | ❌ |
+| **Password Length Validation** | ✅ Min/Max configurable | ❌ |
+| **Confirm Password Option** | ✅ Configurable | Single password only |
+| **Particle Type** | ✅ Configurable | Hardcoded |
+| **Death Teleport** | ✅ Supported | ❌ |
+| **Admin Password Reset** | ✅ Console support | Player only |
+| **Restriction Granularity** | ✅ Fine-grained (10+ options) | Basic (5 options) |
+| **Flight State Preservation** | ✅ | ✅ |
+| **Bedrock Forms** | ✅ | ✅ |
+| **Folia Support** | ✅ | ✅ |
+| **Code Architecture** | Modern OOP, Managers | Legacy structure |
+| **Async Database Operations** | ✅ Connection pooling | Basic async |
+
+### Why Upgrade to NeoLogin?
+
+1. **Better Database Support** - Use MySQL/PostgreSQL for multi-server setups
+2. **Enhanced Security** - Better password validation and management
+3. **More Customization** - Fine-tune every aspect of the plugin
+4. **Modern Codebase** - Easier to maintain and extend
+5. **Active Development** - Regular updates and new features
 
 ---
 
-## 📦 安装
+## 📋 Requirements
 
-1. **下载插件**：
-   - 从 [Releases](../../releases) 下载最新版本
-   - 确保同时下载 `NeoLibrary` 依赖
+| Requirement | Version |
+|-------------|---------|
+| **Minecraft** | 1.21.1+ |
+| **Server Core** | Spigot / Paper / Folia |
+| **Java** | 21+ |
+| **Dependency** | [NeoLibrary](https://github.com/EggFine/NeoLibrary) |
 
-2. **安装插件**：
-   ```bash
-   # 将插件文件放入服务器 plugins 目录
+---
+
+## 📦 Installation
+
+1. **Download** the latest release from [SpigotMC](https://www.spigotmc.org/resources/125813/) or [GitHub Releases](../../releases)
+
+2. **Install Dependencies**:
+   ```
    plugins/
-   ├── NeoLibrary.jar
+   ├── NeoLibrary.jar    (required)
    └── NeoLogin.jar
    ```
 
-3. **启动服务器**：
-   - 启动服务器，插件将自动生成配置文件
-   - 配置文件位置：`plugins/NeoLogin/config.yml`
+3. **Start Server** - Configuration files will be generated automatically
+
+4. **Configure** - Edit `plugins/NeoLogin/config.yml` to your needs
 
 ---
 
-## ⚙️ 配置
+## 🎮 Commands
 
-### 基本配置
+### Player Commands
 
-```yaml
-# 插件消息前缀
-prefix: "§8[§fNeo§bLogin§8] §f"
+| Command | Aliases | Description |
+|---------|---------|-------------|
+| `/register <password> [confirm]` | `/reg` | Register a new account |
+| `/login <password>` | `/l` | Login to your account |
+| `/resetpassword <old> <new>` | `/rp` | Change your password |
 
-# 语言设置
-language: zh_CN
+### Admin Commands
 
-# 数据库配置
-database:
-  type: "sqlite"  # 支持：sqlite, mysql, mariadb, postgresql
-  filePath: "plugins/NeoLogin/playerData.db"
-```
+| Command | Description | Permission |
+|---------|-------------|------------|
+| `/neologin reload` | Reload configuration | `neologin.admin` |
+| `/neologin savelocation` | Save spawn location | `neologin.admin` |
+| `/resetpassword <player> <newpass>` | Reset player password | `neologin.admin` |
 
-### 数据库配置
+---
 
-#### SQLite（推荐小型服务器）
+## ⚙️ Configuration
+
+### Database Setup
+
+<details>
+<summary><b>SQLite (Default)</b></summary>
+
 ```yaml
 database:
   type: "sqlite"
-  filePath: "plugins/NeoLogin/playerData.db"
+  file: "playerData.db"
 ```
+</details>
 
-#### MySQL/MariaDB（推荐大型服务器）
+<details>
+<summary><b>MySQL / MariaDB</b></summary>
+
 ```yaml
 database:
-  type: "mysql"
+  type: "mysql"  # or "mariadb"
   host: "localhost"
   port: 3306
-  databaseName: "neoLogin"
+  database: "neoLogin"
   username: "root"
   password: "your_password"
 ```
+</details>
 
-### 玩家限制配置
+<details>
+<summary><b>PostgreSQL</b></summary>
 
 ```yaml
-notLoggedInPlayerLimit:
+database:
+  type: "postgresql"
+  host: "localhost"
+  port: 5432
+  database: "neoLogin"
+  username: "postgres"
+  password: "your_password"
+```
+</details>
+
+### Registration Rewards
+
+```yaml
+register:
+  reward:
+    enable: true
+    items:
+      - "BREAD:16"
+      - "IRON_SWORD:1"
+    experience: 100
+    consoleCommands:
+      - "give %player% minecraft:cookie 5"
+```
+
+### Bedrock Configuration
+
+```yaml
+bedrock:
   enabled: true
-  type:
-    move: true          # 禁止移动
-    blockPlace: true    # 禁止放置方块
-    blockBreak: true    # 禁止破坏方块
-    chat: true          # 禁止聊天
-    command: true       # 禁止使用命令
-    commandWhitelist:   # 命令白名单
-      - "/login"
-      - "/register"
+  autologin:
+    floodgate: true    # Auto-login via Floodgate API
+    uuid: false        # Auto-login by Bedrock UUID
+    prefix: false      # Auto-login by name prefix
+    prefix_value: "*"
+  forms: true          # Enable form UI for Bedrock
 ```
 
 ---
 
-## 🎮 命令
+## 🔑 Permissions
 
-### 玩家命令
-
-| 命令               | 别名   | 描述     | 权限 |
-| ------------------ | ------ | -------- | ---- |
-| `/register <密码>` | `/reg` | 注册账号 | 无   |
-| `/login <密码>`    | `/l`   | 登录账号 | 无   |
-
-### 管理员命令
-
-| 命令                     | 别名               | 描述                 | 权限             |
-| ------------------------ | ------------------ | -------------------- | ---------------- |
-| `/neologin reload`       | `/nl reload`       | 重载配置文件         | `neologin.admin` |
-| `/neologin savelocation` | `/nl savelocation` | 保存当前位置为传送点 | `neologin.admin` |
+| Permission | Description | Default |
+|------------|-------------|---------|
+| `neologin.admin` | Access to admin commands | OP |
 
 ---
 
-## 🔑 权限
-
-| 权限节点         | 描述       | 默认 |
-| ---------------- | ---------- | ---- |
-| `neologin.admin` | 管理员权限 | OP   |
-
----
-
-## 🛠️ 开发
-
-### 构建项目
+## 🛠️ Building from Source
 
 ```bash
-# 克隆项目
-git clone https://github.com/your-username/NeoLogin.git
+# Clone the repository
+git clone https://github.com/EggFine/NeoLogin.git
 cd NeoLogin
 
-# 构建项目
+# Build with Gradle
 ./gradlew build
 
-# 运行测试服务器
-./gradlew runServer
-```
-
-### 项目结构
-
-```
-NeoLogin/
-├── src/main/java/           # Java 源代码
-├── src/main/resources/      # 资源文件
-│   ├── config.yml          # 配置文件
-│   ├── plugin.yml          # 插件信息
-│   └── languages/          # 语言文件
-├── build.gradle            # Gradle 构建文件
-└── README.md              # 项目说明
+# Output: build/libs/NeoLogin-*.jar
 ```
 
 ---
 
-## 🤝 贡献
+## 🤝 Contributing
 
-我们欢迎任何形式的贡献！
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-1. **Fork** 本项目
-2. **创建** 功能分支 (`git checkout -b feature/AmazingFeature`)
-3. **提交** 更改 (`git commit -m 'Add some AmazingFeature'`)
-4. **推送** 到分支 (`git push origin feature/AmazingFeature`)
-5. **创建** Pull Request
-
----
-
-## 📜 许可证
-
-本项目使用 [Apache-2.0](LICENSE) 许可证开源。
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ---
 
-## 🙏 致谢
+## 📜 License
 
-- 感谢 [blbiLogin](https://github.com/EggFine/blbiLogin) 项目的其他贡献者对我的支持
-- 感谢所有贡献者和用户的支持
+This project is licensed under the [Apache License 2.0](LICENSE).
 
 ---
 
-## 📞 支持
+## 🙏 Acknowledgements
 
-- **GitHub Issues**：[提交问题](../../issues)
-- **原项目参考**：[blbiLogin](https://github.com/EggFine/blbiLogin)
+- [blbiLogin](https://github.com/EggFine/blbiLogin) - The original project that inspired NeoLogin
+- All contributors and testers
+- The Minecraft server community
+
+---
+
+## 📞 Support
+
+- **Issues**: [GitHub Issues](../../issues)
+- **SpigotMC**: [Plugin Page](https://www.spigotmc.org/resources/125813/)
 
 ---
 
 <div align="center">
-
-**⭐ 如果这个项目对你有帮助，请给我们一个星标！**
+  
+**⭐ If NeoLogin helps your server, please consider giving us a star!**
 
 Made with ❤️ by [EggFine](https://github.com/EggFine)
 
