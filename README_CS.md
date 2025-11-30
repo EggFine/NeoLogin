@@ -8,7 +8,7 @@
   [![SpigotMC](https://img.shields.io/badge/SpigotMC-NeoLogin-orange?style=flat-square)](https://www.spigotmc.org/resources/125813/)
   [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg?style=flat-square)](LICENSE)
   [![Java](https://img.shields.io/badge/Java-21+-brightgreen?style=flat-square)](https://adoptium.net/)
-  [![Minecraft](https://img.shields.io/badge/Minecraft-1.21.1+-green?style=flat-square)](https://minecraft.net/)
+  [![Minecraft](https://img.shields.io/badge/Minecraft-1.21.8+-green?style=flat-square)](https://minecraft.net/)
   
   **简体中文** | [English](README.md)
   
